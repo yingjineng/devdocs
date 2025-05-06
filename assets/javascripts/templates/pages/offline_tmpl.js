@@ -1,60 +1,60 @@
 app.templates.offlinePage = (docs) => `\
-<h1 class="_lined-heading">Offline Documentation</h1>
+<h1 class="_lined-heading">离线文档</h1>
 
 <div class="_docs-tools">
   <label>
     <input type="checkbox" name="autoUpdate" value="1" ${
       app.settings.get("manualUpdate") ? "" : "checked"
-    }>Install updates automatically
+    }>自动安装更新
   </label>
   <div class="_docs-links">
-    <button type="button" class="_btn-link" data-action-all="install">Install all</button><button type="button" class="_btn-link" data-action-all="update"><strong>Update all</strong></button><button type="button" class="_btn-link" data-action-all="uninstall">Uninstall all</button>
+    <button type="button" class="_btn-link" data-action-all="install">全部安装</button><button type="button" class="_btn-link" data-action-all="update"><strong>全部更新</strong></button><button type="button" class="_btn-link" data-action-all="uninstall">全部卸载</button>
   </div>
 </div>
 
 <div class="_table">
   <table class="_docs">
     <tr>
-      <th>Documentation</th>
-      <th class="_docs-size">Size</th>
-      <th>Status</th>
-      <th>Action</th>
+      <th>文档</th>
+      <th class="_docs-size">大小</th>
+      <th>状态</th>
+      <th>操作</th>
     </tr>
     ${docs}
   </table>
 </div>
-<p class="_note"><strong>Note:</strong> your browser may delete DevDocs's offline data if your computer is running low on disk space and you haven't used the app in a while. Load this page before going offline to make sure the data is still there.
-<h2 class="_block-heading">Questions & Answers</h2>
+<p class="_note"><strong>注意：</strong>如果您的计算机磁盘空间不足且长时间未使用该应用，浏览器可能会删除 DevDocs 的离线数据。请在离线前加载此页面以确保数据仍然存在。
+<h2 class="_block-heading">常见问题</h2>
 <dl>
-  <dt>How does this work?
-  <dd>Each page is cached as a key-value pair in <a href="https://devdocs.io/dom/indexeddb_api">IndexedDB</a> (downloaded from a single file).<br>
-      The app also uses <a href="https://devdocs.io/dom/service_worker_api/using_service_workers">Service Workers</a> and <a href="https://devdocs.io/dom/web_storage_api">localStorage</a> to cache the assets and index files.
-  <dt>Can I close the tab/browser?
+  <dt>这是如何工作的？
+  <dd>每个页面都作为 <a href="https://devdocs.io/dom/indexeddb_api">IndexedDB</a> 中的键值对缓存（从单个文件下载）。<br>
+      应用还使用 <a href="https://devdocs.io/dom/service_worker_api/using_service_workers">Service Worker</a> 和 <a href="https://devdocs.io/dom/web_storage_api">localStorage</a> 缓存资源和索引文件。
+  <dt>我可以关闭标签页/浏览器吗？
   <dd>${canICloseTheTab()}
-  <dt>What if I don't update a documentation?
-  <dd>You'll see outdated content and some pages will be missing or broken, because the rest of the app (including data for the search and sidebar) uses a different caching mechanism that's updated automatically.
-  <dt>I found a bug, where do I report it?
-  <dd>In the <a href="https://github.com/freeCodeCamp/devdocs/issues">issue tracker</a>. Thanks!
-  <dt>How do I uninstall/reset the app?
-  <dd>Click <a href="#" data-behavior="reset">here</a>.
-  <dt>Why aren't all documentations listed above?
-  <dd>You have to <a href="/settings">enable</a> them first.
+  <dt>如果我不更新某个文档会怎样？
+  <dd>您将看到过时的内容，并且部分页面可能缺失或损坏，因为应用的其他部分（包括搜索和侧边栏的数据）使用的是自动更新的不同缓存机制。
+  <dt>我发现了一个 bug，在哪里反馈？
+  <dd>请在 <a href="https://github.com/freeCodeCamp/devdocs/issues">问题追踪器</a> 中反馈。谢谢！
+  <dt>如何卸载/重置应用？
+  <dd>点击 <a href="#" data-behavior="reset">这里</a>。
+  <dt>为什么上面没有列出所有文档？
+  <dd>您需要先在<a href="/settings">设置</a>中启用它们。
 </dl>\
 `;
 
 var canICloseTheTab = function () {
   if (app.ServiceWorker.isEnabled()) {
-    return ' Yes! Even offline, you can open a new tab, go to <a href="//devdocs.io">devdocs.io</a>, and everything will work as if you were online (provided you installed all the documentations you want to use beforehand). ';
+    return ' 可以！即使离线，您也可以打开新标签页，访问 <a href="//devdocs.io">devdocs.io</a>，一切都会像在线一样正常工作（前提是您已提前安装好所需文档）。 ';
   } else {
-    let reason = "aren't available in your browser (or are disabled)";
+    let reason = "在您的浏览器中不可用（或已被禁用）";
 
     if (app.config.env !== "production") {
       reason =
-        "are disabled in your development instance of DevDocs (enable them by setting the <code>ENABLE_SERVICE_WORKER</code> environment variable to <code>true</code>)";
+        "在您的 DevDocs 开发环境中被禁用（可通过设置 <code>ENABLE_SERVICE_WORKER</code> 环境变量为 <code>true</code> 启用）";
     }
 
-    return ` No. Service Workers ${reason}, so loading <a href="//devdocs.io">devdocs.io</a> offline won't work.<br>
-The current tab will continue to function even when you go offline (provided you installed all the documentations beforehand). `;
+    return ` 不可以。Service Worker ${reason}，因此离线加载 <a href="//devdocs.io">devdocs.io</a> 将无法使用。<br>
+当前标签页在离线后仍可继续使用（前提是您已提前安装好所需文档）。 `;
   }
 };
 
@@ -72,16 +72,16 @@ app.templates.offlineDoc = function (doc, status) {
   html += !(status && status.installed)
     ? `\
 <td>-</td>
-<td><button type="button" class="_btn-link" data-action="install">Install</button></td>\
+<td><button type="button" class="_btn-link" data-action="install">安装</button></td>\
 `
     : outdated
       ? `\
-<td><strong>Outdated</strong></td>
-<td><button type="button" class="_btn-link _bold" data-action="update">Update</button> - <button type="button" class="_btn-link" data-action="uninstall">Uninstall</button></td>\
+<td><strong>已过期</strong></td>
+<td><button type="button" class="_btn-link _bold" data-action="update">更新</button> - <button type="button" class="_btn-link" data-action="uninstall">卸载</button></td>\
 `
       : `\
-<td>Up&#8209;to&#8209;date</td>
-<td><button type="button" class="_btn-link" data-action="uninstall">Uninstall</button></td>\
+<td>最新</td>
+<td><button type="button" class="_btn-link" data-action="uninstall">卸载</button></td>\
 `;
 
   return html + "</tr>";

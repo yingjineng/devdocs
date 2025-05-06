@@ -1,7 +1,7 @@
 module Docs
   class Html
     class EntriesFilter < Docs::EntriesFilter
-      ADDITIONAL_ENTRIES = { 'Element/Heading_Elements' => (1..6).map { |n| ["h#{n}"] } }
+      ADDITIONAL_ENTRIES = { 'Reference/Elements/Heading_Elements' => (1..6).map { |n| ["h#{n}"] } }
 
       def get_name
         name = super
@@ -12,16 +12,27 @@ module Docs
       end
 
       def get_type
-        return 'Miscellaneous' if slug.include?('CORS') || slug.include?('Using')
+        # return '其他' if slug.include?('CORS') || slug.include?('Using')
+
 
         if at_css('.deprecated', '.non-standard', '.obsolete')
-        'Obsolete'
-        elsif slug.start_with?('Global_attr')
-          'Attributes'
-        elsif slug.start_with?('Element/')
+          'Obsolete'
+        elsif slug.start_with?('Guides/')
+          'Guides'
+        elsif slug.start_with?('How_to/')
+          'How to'
+        elsif slug.start_with?('Reference/Elements/')
           'Elements'
+        elsif slug.start_with?('Reference/Attributes/')
+          'Attributes'
+        elsif slug.start_with?('Reference/Global_attributes/')
+          'Global attributes'
+        elsif slug.start_with?('Reference/Elements/input/') || slug.start_with?('Reference/Elements/script/type/') || slug.start_with?('Reference/Elements/meta/name/') 
+          'Attributes by element'
+        elsif slug.start_with?('Reference/Attributes/rel/')
+          'Attribute values'
         else
-          'Miscellaneous'
+          'Other'
         end
       end
 
@@ -33,7 +44,7 @@ module Docs
       def additional_entries
         return ADDITIONAL_ENTRIES[slug] if ADDITIONAL_ENTRIES.key?(slug)
 
-        if slug == 'Attributes'
+        if slug == 'Reference/Attributes'
           css('.standard-table td:first-child').each_with_object [] do |node, entries|
             next if node.next_element.content.include?('Global attribute')
             name = "#{node.content.strip} (attribute)"

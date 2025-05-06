@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" class="_booting">
+<html lang="zh-CN" class="_booting">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <% if doc_index_page? %><meta name="description" content="<%= @doc['name'] %> <%= @doc['release'] %> API documentation with instant search, offline support, keyboard shortcuts, mobile version, and more."><% else %><meta name="robots" content="noindex"><% end %>
+  <% if doc_index_page? %><meta name="description" content="<%= @doc['name'] %> <%= @doc['release'] %> API 文档，支持即时搜索、离线使用、键盘快捷键、移动端版本等。"><% else %><meta name="robots" content="noindex"><% end %>
   <meta name="format-detection" content="telephone=no">
   <meta name="theme-color" content="#eee">
   <meta property="og:image" content="/images/icon-320.png">
-  <title>DevDocs<%= " &mdash; #{@doc['full_name']} documentation" if doc_index_page? %></title>
+  <title>DevDocs<%= " &mdash; #{@doc['full_name']} 文档" if doc_index_page? %></title>
   <link rel="canonical" href="<%= canonical_origin %><%= request.path %>">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="Search DevDocs">
+  <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="搜索 DevDocs">
   <%= stylesheet_tag 'application' %>
 </head>
 <body data-doc="<%= CGI::escape_html @doc.to_json %>">
-<noscript class="_fail">DevDocs requires JavaScript to run.</noscript>
+<noscript class="_fail">DevDocs 需要启用 JavaScript。</noscript>
 <%= erb :app -%>
 <%= javascript_tag 'application' %><% unless App.production? %>
 <%= javascript_tag 'debug' %><% end %>

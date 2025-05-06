@@ -12,8 +12,8 @@ app.views.EntryPage = class EntryPage extends app.View {
   static routes = { before: "beforeRoute" };
 
   static LINKS = {
-    home: "Homepage",
-    code: "Source code",
+    home: "主页",
+    code: "源代码",
   };
 
   init() {
@@ -68,8 +68,8 @@ app.views.EntryPage = class EntryPage extends app.View {
       this.copyButton.innerHTML = '<svg><use xlink:href="#icon-copy"/></svg>';
       this.copyButton.type = "button";
       this.copyButton.className = "_pre-clip";
-      this.copyButton.title = "Copy to clipboard";
-      this.copyButton.setAttribute("aria-label", "Copy to clipboard");
+      this.copyButton.title = "复制到剪贴板";
+      this.copyButton.setAttribute("aria-label", "复制到剪贴板");
     }
     for (var el of this.findAllByTag("pre")) {
       el.appendChild(this.copyButton.cloneNode(true));
@@ -127,7 +127,7 @@ app.views.EntryPage = class EntryPage extends app.View {
   getTitle() {
     return (
       this.entry.doc.fullName +
-      (this.entry.isIndex() ? " documentation" : ` / ${this.entry.name}`)
+      (this.entry.isIndex() ? " 文档" : ` / ${this.entry.name}`)
     );
   }
 

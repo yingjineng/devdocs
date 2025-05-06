@@ -1,40 +1,40 @@
-# [DevDocs](https://devdocs.io) — API Documentation Browser
+# [DevDocs](https://devdocs.io) — API 文档浏览器
 
-DevDocs combines multiple developer documentations in a clean and organized web UI with instant search, offline support, mobile version, dark theme, keyboard shortcuts, and more.
+DevDocs 将多种开发者文档整合到一个简洁有序的 Web 界面中，支持即时搜索、离线使用、移动端适配、深色主题、键盘快捷键等功能。
 
-DevDocs was created by [Thibaut Courouble](https://thibaut.me) and is operated by [freeCodeCamp](https://www.freecodecamp.org).
+DevDocs 由 [Thibaut Courouble](https://thibaut.me) 创建，目前由 [freeCodeCamp](https://www.freecodecamp.org) 运营。
 
-## We are currently searching for maintainers
+## 我们正在寻找维护者
 
-Please reach out to the community on [Discord](https://discord.gg/PRyKn3Vbay) if you would like to join the team!
+如果你有兴趣加入团队，请在 [Discord](https://discord.gg/PRyKn3Vbay) 社区联系我们！
 
-Keep track of development news:
+关注开发动态：
 
-* Join the devdocs chat room on [Discord](https://discord.gg/PRyKn3Vbay)
-* Watch the repository on [GitHub](https://github.com/freeCodeCamp/devdocs/subscription)
-* Follow [@DevDocs](https://twitter.com/DevDocs) on Twitter
+* 加入 DevDocs 聊天室：[Discord](https://discord.gg/PRyKn3Vbay)
+* 关注 GitHub 仓库：[GitHub](https://github.com/freeCodeCamp/devdocs/subscription)
+* 关注 Twitter 上的 [@DevDocs](https://twitter.com/DevDocs)
 
-**Table of Contents:** [Quick Start](#quick-start) · [Vision](#vision) · [App](#app) · [Scraper](#scraper) · [Commands](#available-commands) · [Contributing](#contributing) · [Documentation](#documentation) · [Related Projects](#related-projects) · [License](#copyright--license) · [Questions?](#questions)
+**目录：** [快速开始](#快速开始) · [愿景](#愿景) · [应用](#应用) · [爬虫](#爬虫) · [可用命令](#可用命令) · [贡献](#贡献) · [文档](#文档) · [相关项目](#相关项目) · [版权--许可证](#版权--许可证) · [常见问题](#常见问题)
 
-## Quick Start
+## 快速开始
 
-Unless you wish to contribute to the project, we recommend using the hosted version at [devdocs.io](https://devdocs.io). It's up-to-date and works offline out-of-the-box.
+除非你希望为项目做贡献，否则推荐直接使用托管版 [devdocs.io](https://devdocs.io)。它始终保持最新，并且开箱即用支持离线。
 
-### Using Docker (Recommended)
+### 使用 Docker（推荐）
 
-The easiest way to run DevDocs locally is using Docker:
+本地运行 DevDocs 最简单的方法是使用 Docker：
 
 ```sh
 docker run --name devdocs -d -p 9292:9292 ghcr.io/freecodecamp/devdocs:latest
 ```
 
-This will start DevDocs at [localhost:9292](http://localhost:9292). We provide both regular and Alpine-based images:
-- `ghcr.io/freecodecamp/devdocs:latest` - Standard image
-- `ghcr.io/freecodecamp/devdocs:latest-alpine` - Alpine-based (smaller size)
+这将在 [localhost:9292](http://localhost:9292) 启动 DevDocs。我们提供常规版和基于 Alpine 的镜像：
+- `ghcr.io/freecodecamp/devdocs:latest` - 标准镜像
+- `ghcr.io/freecodecamp/devdocs:latest-alpine` - 基于 Alpine（体积更小）
 
-Images are automatically built and updated monthly with the latest documentation.
+镜像会自动构建并每月更新，包含最新文档。
 
-Alternatively, you can build the image yourself:
+你也可以自行构建镜像：
 
 ```sh
 git clone https://github.com/freeCodeCamp/devdocs.git && cd devdocs
@@ -42,11 +42,11 @@ docker build -t devdocs .
 docker run --name devdocs -d -p 9292:9292 devdocs
 ```
 
-### Manual Installation
+### 手动安装
 
-DevDocs is made of two pieces: a Ruby scraper that generates the documentation and metadata, and a JavaScript app powered by a small Sinatra app.
+DevDocs 由两部分组成：一个 Ruby 爬虫用于生成文档和元数据，以及一个由小型 Sinatra 应用驱动的 JavaScript 应用。
 
-DevDocs requires Ruby 3.4.1 (defined in [`Gemfile`](./Gemfile)), libcurl, and a JavaScript runtime supported by [ExecJS](https://github.com/rails/execjs#readme) (included in OS X and Windows; [Node.js](https://nodejs.org/en/) on Linux). Once you have these installed, run the following commands:
+DevDocs 需要 Ruby 3.4.1（见 [`Gemfile`](./Gemfile)）、libcurl 和一个 [ExecJS](https://github.com/rails/execjs#readme) 支持的 JavaScript 运行时（OS X 和 Windows 已内置，Linux 推荐 [Node.js](https://nodejs.org/en/)）。安装好这些依赖后，运行以下命令：
 
 ```sh
 git clone https://github.com/freeCodeCamp/devdocs.git && cd devdocs
@@ -56,153 +56,153 @@ bundle exec thor docs:download --default
 bundle exec rackup
 ```
 
-Finally, point your browser at [localhost:9292](http://localhost:9292) (the first request will take a few seconds to compile the assets). You're all set.
+最后，在浏览器中访问 [localhost:9292](http://localhost:9292)（首次请求会花几秒编译资源）。一切就绪！
 
-The `thor docs:download` command is used to download pre-generated documentations from DevDocs's servers (e.g. `thor docs:download html css`). You can see the list of available documentations and versions by running `thor docs:list`. To update all downloaded documentations, run `thor docs:download --installed`. To download and install all documentation this project has available, run `thor docs:download --all`.
+`thor docs:download` 命令用于从 DevDocs 服务器下载预生成文档（如 `thor docs:download html css`）。可通过 `thor docs:list` 查看可用文档及版本。要更新所有已下载文档，运行 `thor docs:download --installed`。如需下载并安装所有可用文档，运行 `thor docs:download --all`。
 
-**Note:** there is currently no update mechanism other than `git pull origin main` to update the code and `thor docs:download --installed` to download the latest version of the docs. To stay informed about new releases, be sure to [watch](https://github.com/freeCodeCamp/devdocs/subscription) this repository.
+**注意：** 目前没有自动更新机制，需通过 `git pull origin main` 更新代码，通过 `thor docs:download --installed` 下载最新文档。请 [关注](https://github.com/freeCodeCamp/devdocs/subscription) 仓库以获取新版本信息。
 
-## Vision
+## 愿景
 
-DevDocs aims to make reading and searching reference documentation fast, easy and enjoyable.
+DevDocs 致力于让查阅和搜索参考文档变得快速、简单、愉悦。
 
-The app's main goals are to:
+应用的主要目标：
 
-* Keep load times as short as possible
-* Improve the quality, speed, and order of search results
-* Maximize the use of caching and other performance optimizations
-* Maintain a clean and readable user interface
-* Be fully functional offline
-* Support full keyboard navigation
-* Reduce “context switch” by using a consistent typography and design across all documentations
-* Reduce clutter by focusing on a specific category of content (API/reference) and indexing only the minimum useful to most developers.
+* 尽量缩短加载时间
+* 提升搜索结果的质量、速度和排序
+* 最大化缓存和其他性能优化的利用
+* 保持界面简洁易读
+* 完全支持离线功能
+* 支持全键盘导航
+* 通过统一的排版和设计减少“上下文切换”
+* 通过聚焦 API/参考类内容并仅索引对大多数开发者有用的最小内容，减少杂乱
 
-**Note:** DevDocs is neither a programming guide nor a search engine. All our content is pulled from third-party sources and the project doesn't intend to compete with full-text search engines. Its backbone is metadata; each piece of content is identified by a unique, "obvious" and short string. Tutorials, guides and other content that don't meet this requirement are outside the scope of the project.
+**注意：** DevDocs 不是编程指南或搜索引擎。所有内容均来自第三方，项目无意与全文搜索引擎竞争。其核心是元数据，每条内容都有唯一、简明的标识符。不符合此要求的教程、指南等内容不在项目范围内。
 
-## App
+## 应用
 
-The web app is all client-side JavaScript, powered by a small [Sinatra](http://www.sinatrarb.com)/[Sprockets](https://github.com/rails/sprockets) application. It relies on files generated by the [scraper](#scraper).
+Web 应用完全由客户端 JavaScript 实现，后端为小型 [Sinatra](http://www.sinatrarb.com)/[Sprockets](https://github.com/rails/sprockets) 应用。依赖 [爬虫](#scraper) 生成的文件。
 
-Many of the code's design decisions were driven by the fact that the app uses XHR to load content directly into the main frame. This includes stripping the original documents of most of their HTML markup (e.g. scripts and stylesheets) to avoid polluting the main frame, and prefixing all CSS class names with an underscore to prevent conflicts.
+许多设计决策源于应用通过 XHR 直接加载内容到主框架，包括去除原始文档的大部分 HTML 标记（如脚本和样式表），并为所有 CSS 类名前缀下划线以避免冲突。
 
-Another driving factor is performance and the fact that everything happens in the browser. A service worker (which comes with its own set of constraints) and `localStorage` are used to speed up the boot time, while memory consumption is kept in check by allowing the user to pick his/her own set of documentations. The search algorithm is kept simple because it needs to be fast even searching through 100,000 strings.
+另一个关键因素是性能及一切都在浏览器端完成。通过 service worker（有自身限制）和 `localStorage` 加速启动，同时允许用户自选文档以控制内存消耗。搜索算法保持简单，以便即使在 10 万条字符串中也能快速搜索。
 
-DevDocs being a developer tool, the browser requirements are high:
+作为开发者工具，浏览器要求较高：
 
-* Recent versions of Firefox, Chrome, or Opera
+* 最新版 Firefox、Chrome 或 Opera
 * Safari 11.1+
 * Edge 17+
 * iOS 11.3+
 
-This allows the code to take advantage of the latest DOM and HTML5 APIs and make developing DevDocs a lot more fun!
+这让代码能充分利用最新 DOM 和 HTML5 API，也让开发更有趣！
 
-## Scraper
+## 爬虫
 
-The scraper is responsible for generating the documentation and index files (metadata) used by the [app](#app). It's written in Ruby under the `Docs` module.
+爬虫负责生成 [应用](#app) 使用的文档和索引文件（元数据），用 Ruby 编写，位于 `Docs` 模块下。
 
-There are currently two kinds of scrapers: `UrlScraper` which downloads files via HTTP and `FileScraper` which reads them from the local filesystem. They both make copies of HTML documents, recursively following links that match a set of rules and applying all sorts of modifications along the way, in addition to building an index of the files and their metadata. Documents are parsed using [Nokogiri](http://nokogiri.org).
+目前有两类爬虫：`UrlScraper`（通过 HTTP 下载文件）和 `FileScraper`（从本地文件系统读取）。它们都会复制 HTML 文档，递归跟踪符合规则的链接并进行各种修改，同时构建文件及其元数据的索引。文档解析使用 [Nokogiri](http://nokogiri.org)。
 
-Modifications made to each document include:
+每个文档的修改包括：
 
-* removing content such as the document structure (`<html>`, `<head>`, etc.), comments, empty nodes, etc.
-* fixing links (e.g. to remove duplicates)
-* replacing all external (not scraped) URLs with their fully qualified counterpart
-* replacing all internal (scraped) URLs with their unqualified and relative counterpart
-* adding content, such as a title and link to the original document
-* ensuring correct syntax highlighting using [Prism](http://prismjs.com/)
+* 移除内容，如文档结构（`<html>`、`<head>` 等）、注释、空节点等
+* 修复链接（如去重）
+* 替换所有外部（未爬取）URL 为完整路径
+* 替换所有内部（已爬取）URL 为相对路径
+* 添加内容，如标题和原文链接
+* 确保使用 [Prism](http://prismjs.com/) 正确语法高亮
 
-These modifications are applied via a set of filters using the [HTML::Pipeline](https://github.com/jch/html-pipeline) library. Each scraper includes filters specific to itself, one of which is tasked with figuring out the pages' metadata.
+这些修改通过 [HTML::Pipeline](https://github.com/jch/html-pipeline) 库的一组过滤器实现。每个爬虫包含自身特有的过滤器，其中之一负责提取页面元数据。
 
-The end result is a set of normalized HTML partials and two JSON files (index + offline data). Because the index files are loaded separately by the [app](#app) following the user's preferences, the scraper also creates a JSON manifest file containing information about the documentations currently available on the system (such as their name, version, update date, etc.).
+最终生成一组标准化的 HTML 片段和两个 JSON 文件（索引 + 离线数据）。因索引文件会根据用户偏好由 [应用](#app) 单独加载，爬虫还会创建一个 JSON 清单文件，包含当前系统可用文档的信息（如名称、版本、更新时间等）。
 
-More information about [scrapers](./docs/scraper-reference.md) and [filters](./docs/filter-reference.md) is available in the `docs` folder.
+更多关于 [爬虫](./docs/scraper-reference.md) 和 [过滤器](./docs/filter-reference.md) 的信息见 `docs` 文件夹。
 
-## Available Commands
+## 可用命令
 
-The command-line interface uses [Thor](http://whatisthor.com). To see all commands and options, run `thor list` from the project's root.
+命令行界面使用 [Thor](http://whatisthor.com)。查看所有命令和选项，请在项目根目录运行 `thor list`。
 
 ```sh
-# Server
-rackup              # Start the server (ctrl+c to stop)
-rackup --help       # List server options
+# 服务器
+rackup              # 启动服务器（ctrl+c 停止）
+rackup --help       # 列出服务器选项
 
-# Docs
-thor docs:list      # List available documentations
-thor docs:download  # Download one or more documentations
-thor docs:manifest  # Create the manifest file used by the app
-thor docs:generate  # Generate/scrape a documentation
-thor docs:page      # Generate/scrape a documentation page
-thor docs:package   # Package a documentation for use with docs:download
-thor docs:clean     # Delete documentation packages
+# 文档
+thor docs:list      # 列出可用文档
+thor docs:download  # 下载一个或多个文档
+thor docs:manifest  # 创建应用使用的清单文件
+thor docs:generate  # 生成/爬取文档
+thor docs:page      # 生成/爬取文档页面
+thor docs:package   # 打包文档以供 docs:download 使用
+thor docs:clean     # 删除文档包
 
-# Console
-thor console        # Start a REPL
-thor console:docs   # Start a REPL in the "Docs" module
+# 控制台
+thor console        # 启动 REPL
+thor console:docs   # 在 "Docs" 模块下启动 REPL
 
-# Tests can be run quickly from within the console using the "test" command.
-# Run "help test" for usage instructions.
-thor test:all       # Run all tests
-thor test:docs      # Run "Docs" tests
-thor test:app       # Run "App" tests
+# 可在控制台内用 "test" 命令快速运行测试。
+# 运行 "help test" 查看用法说明。
+thor test:all       # 运行所有测试
+thor test:docs      # 运行 "Docs" 测试
+thor test:app       # 运行 "App" 测试
 
-# Assets
-thor assets:compile # Compile assets (not required in development mode)
-thor assets:clean   # Clean old assets
+# 资源
+thor assets:compile # 编译资源（开发模式下无需）
+thor assets:clean   # 清理旧资源
 ```
 
-If multiple versions of Ruby are installed on your system, commands must be run through `bundle exec`.
+如系统安装了多个 Ruby 版本，命令需通过 `bundle exec` 运行。
 
-## Contributing
+## 贡献
 
-Contributions are welcome. Please read the [contributing guidelines](./.github/CONTRIBUTING.md).
+欢迎贡献！请阅读[贡献指南](./.github/CONTRIBUTING.md)。
 
-## Documentation
+## 文档
 
-* [Adding documentations to DevDocs](./docs/adding-docs.md)
-* [Scraper Reference](./docs/scraper-reference.md)
-* [Filter Reference](./docs/filter-reference.md)
-* [Maintainers’ Guide](./docs/maintainers.md)
+* [向 DevDocs 添加文档](./docs/adding-docs.md)
+* [爬虫参考](./docs/scraper-reference.md)
+* [过滤器参考](./docs/filter-reference.md)
+* [维护者指南](./docs/maintainers.md)
 
-## Related Projects
+## 相关项目
 
-Made something cool? Feel free to open a PR to add a new row to this table! You might want to discover new projects via https://github.com/topics/devdocs.
+做了什么有趣的项目？欢迎 PR 添加到下表！你也可以通过 https://github.com/topics/devdocs 发现新项目。
 
-<!-- table is sorted by description -->
+<!-- 按描述排序 -->
 
-| Project                                                                                     | Description                          | Last commit                                                                                                          | Stars                                                                                                  |
-| ------------------------------------------------------------------------------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| [yannickglt/alfred-devdocs](https://github.com/yannickglt/alfred-devdocs)                   | Alfred workflow                      | ![Latest GitHub commit](https://img.shields.io/github/last-commit/yannickglt/alfred-devdocs?logo=github&label)       | ![GitHub stars](https://img.shields.io/github/stars/yannickglt/alfred-devdocs?logo=github&label)       |
-| [Merith-TK/devdocs_webapp_kotlin](https://github.com/Merith-TK/devdocs_webapp_kotlin)       | Android application                  | ![Latest GitHub commit](https://img.shields.io/github/last-commit/Merith-TK/devdocs_webapp_kotlin?logo=github&label) | ![GitHub stars](https://img.shields.io/github/stars/Merith-TK/devdocs_webapp_kotlin?logo=github&label) |
-| [gruehle/dev-docs-viewer](https://github.com/gruehle/dev-docs-viewer)                       | Brackets extension                   | ![Latest GitHub commit](https://img.shields.io/github/last-commit/gruehle/dev-docs-viewer?logo=github&label)         | ![GitHub stars](https://img.shields.io/github/stars/gruehle/dev-docs-viewer?logo=github&label)         |
-| [egoist/devdocs-desktop](https://github.com/egoist/devdocs-desktop)                         | Electron application                 | ![Latest GitHub commit](https://img.shields.io/github/last-commit/egoist/devdocs-desktop?logo=github&label)          | ![GitHub stars](https://img.shields.io/github/stars/egoist/devdocs-desktop?logo=github&label)          |
-| [skeeto/devdocs-lookup](https://github.com/skeeto/devdocs-lookup)                           | Emacs function                       | ![Latest GitHub commit](https://img.shields.io/github/last-commit/skeeto/devdocs-lookup?logo=github&label)           | ![GitHub stars](https://img.shields.io/github/stars/skeeto/devdocs-lookup?logo=github&label)           |
-| [astoff/devdocs.el](https://github.com/astoff/devdocs.el)                                   | Emacs viewer                         | ![Latest GitHub commit](https://img.shields.io/github/last-commit/astoff/devdocs.el?logo=github&label)               | ![GitHub stars](https://img.shields.io/github/stars/astoff/devdocs.el?logo=github&label)               |
-| [naquad/devdocs-shell](https://github.com/naquad/devdocs-shell)                             | GTK shell with Vim integration       | ![Latest GitHub commit](https://img.shields.io/github/last-commit/naquad/devdocs-shell?logo=github&label)            | ![GitHub stars](https://img.shields.io/github/stars/naquad/devdocs-shell?logo=github&label)            |
-| [hardpixel/devdocs-desktop](https://github.com/hardpixel/devdocs-desktop)                   | GTK application                      | ![Latest GitHub commit](https://img.shields.io/github/last-commit/hardpixel/devdocs-desktop?logo=github&label)       | ![GitHub stars](https://img.shields.io/github/stars/hardpixel/devdocs-desktop?logo=github&label)       |
-| [qwfy/doc-browser](https://github.com/qwfy/doc-browser)                                     | Linux application                    | ![Latest GitHub commit](https://img.shields.io/github/last-commit/qwfy/doc-browser?logo=github&label)                | ![GitHub stars](https://img.shields.io/github/stars/qwfy/doc-browser?logo=github&label)                |
-| [dteoh/devdocs-macos](https://github.com/dteoh/devdocs-macos)                               | macOS application                    | ![Latest GitHub commit](https://img.shields.io/github/last-commit/dteoh/devdocs-macos?logo=github&label)             | ![GitHub stars](https://img.shields.io/github/stars/dteoh/devdocs-macos?logo=github&label)             |
-| [Sublime Text plugin](https://sublime.wbond.net/packages/DevDocs)                           | Sublime Text plugin                  | ![Latest GitHub commit](https://img.shields.io/github/last-commit/vitorbritto/sublime-devdocs?logo=github&label)     | ![GitHub stars](https://img.shields.io/github/stars/vitorbritto/sublime-devdocs?logo=github&label)     |
-| [mohamed3nan/DevDocs-Tab](https://github.com/mohamed3nan/DevDocs-Tab)                       | VS Code extension (view as tab)      | ![Latest GitHub commit](https://img.shields.io/github/last-commit/mohamed3nan/DevDocs-Tab?logo=github&label)         | ![GitHub stars](https://img.shields.io/github/stars/mohamed3nan/DevDocs-Tab?logo=github&label)         |
-| [deibit/vscode-devdocs](https://marketplace.visualstudio.com/items?itemName=deibit.devdocs) | VS Code extension (open the browser) | ![Latest GitHub commit](https://img.shields.io/github/last-commit/deibit/vscode-devdocs?logo=github&label)           | ![GitHub stars](https://img.shields.io/github/stars/deibit/vscode-devdocs?logo=github&label)           |
-| [mdh34/quickDocs](https://github.com/mdh34/quickDocs)                                       | Vala/Python based viewer             | ![Latest GitHub commit](https://img.shields.io/github/last-commit/mdh34/quickDocs?logo=github&label)                 | ![GitHub stars](https://img.shields.io/github/stars/mdh34/quickDocs?logo=github&label)                 |
-| [girishji/devdocs.vim](https://github.com/girishji/devdocs.vim)                               | Vim plugin & TUI (browse inside Vim)                           | ![Latest GitHub commit](https://img.shields.io/github/last-commit/girishji/devdocs.vim?logo=github&label)             | ![GitHub stars](https://img.shields.io/github/stars/girishji/devdocs.vim?logo=github&label)             |
-| [romainl/vim-devdocs](https://github.com/romainl/vim-devdocs)                               | Vim plugin                           | ![Latest GitHub commit](https://img.shields.io/github/last-commit/romainl/vim-devdocs?logo=github&label)             | ![GitHub stars](https://img.shields.io/github/stars/romainl/vim-devdocs?logo=github&label)             |
-| [waiting-for-dev/vim-www](https://github.com/waiting-for-dev/vim-www)                       | Vim plugin                           | ![Latest GitHub commit](https://img.shields.io/github/last-commit/waiting-for-dev/vim-www?logo=github&label)         | ![GitHub stars](https://img.shields.io/github/stars/waiting-for-dev/vim-www?logo=github&label)         |
-| [luckasRanarison/nvim-devdocs](https://github.com/luckasRanarison/nvim-devdocs)             | Neovim plugin                        | ![Latest GitHub commit](https://img.shields.io/github/last-commit/luckasRanarison/nvim-devdocs?logo=github&label)    | ![GitHub stars](https://img.shields.io/github/stars/luckasRanarison/nvim-devdocs?logo=github&label)    |
-| [toiletbril/dedoc](https://github.com/toiletbril/dedoc)                                     | Terminal based viewer                | ![Latest GitHub commit](https://img.shields.io/github/last-commit/toiletbril/dedoc?logo=github&label)                | ![GitHub stars](https://img.shields.io/github/stars/toiletbril/dedoc?logo=github&label)                |
-| [Raycast Devdocs](https://www.raycast.com/djpowers/devdocs)                                 | Raycast extension                    | Unavailable                 | Unavailable                |
-| [chrisgrieser/alfred-docs-searches](https://github.com/chrisgrieser/alfred-docs-searches)   | Alfred workflow                      | ![Latest GitHub commit](https://img.shields.io/github/last-commit/chrisgrieser/alfred-docs-searches?logo=github&label) | ![GitHub stars](https://img.shields.io/github/stars/chrisgrieser/alfred-docs-searches?logo=github&label) |
+| 项目                                                                                     | 描述                          | 最近提交                                                                                                          | Star 数                                                                                                  |
+| ---------------------------------------------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [yannickglt/alfred-devdocs](https://github.com/yannickglt/alfred-devdocs)                | Alfred 工作流                 | ![Latest GitHub commit](https://img.shields.io/github/last-commit/yannickglt/alfred-devdocs?logo=github&label)    | ![GitHub stars](https://img.shields.io/github/stars/yannickglt/alfred-devdocs?logo=github&label)         |
+| [Merith-TK/devdocs_webapp_kotlin](https://github.com/Merith-TK/devdocs_webapp_kotlin)    | 安卓应用                      | ![Latest GitHub commit](https://img.shields.io/github/last-commit/Merith-TK/devdocs_webapp_kotlin?logo=github&label) | ![GitHub stars](https://img.shields.io/github/stars/Merith-TK/devdocs_webapp_kotlin?logo=github&label)   |
+| [gruehle/dev-docs-viewer](https://github.com/gruehle/dev-docs-viewer)                    | Brackets 扩展                 | ![Latest GitHub commit](https://img.shields.io/github/last-commit/gruehle/dev-docs-viewer?logo=github&label)      | ![GitHub stars](https://img.shields.io/github/stars/gruehle/dev-docs-viewer?logo=github&label)           |
+| [egoist/devdocs-desktop](https://github.com/egoist/devdocs-desktop)                      | Electron 应用                 | ![Latest GitHub commit](https://img.shields.io/github/last-commit/egoist/devdocs-desktop?logo=github&label)       | ![GitHub stars](https://img.shields.io/github/stars/egoist/devdocs-desktop?logo=github&label)            |
+| [skeeto/devdocs-lookup](https://github.com/skeeto/devdocs-lookup)                        | Emacs 函数                    | ![Latest GitHub commit](https://img.shields.io/github/last-commit/skeeto/devdocs-lookup?logo=github&label)        | ![GitHub stars](https://img.shields.io/github/stars/skeeto/devdocs-lookup?logo=github&label)             |
+| [astoff/devdocs.el](https://github.com/astoff/devdocs.el)                                | Emacs 查看器                  | ![Latest GitHub commit](https://img.shields.io/github/last-commit/astoff/devdocs.el?logo=github&label)            | ![GitHub stars](https://img.shields.io/github/stars/astoff/devdocs.el?logo=github&label)                 |
+| [naquad/devdocs-shell](https://github.com/naquad/devdocs-shell)                          | GTK shell，集成 Vim           | ![Latest GitHub commit](https://img.shields.io/github/last-commit/naquad/devdocs-shell?logo=github&label)         | ![GitHub stars](https://img.shields.io/github/stars/naquad/devdocs-shell?logo=github&label)              |
+| [hardpixel/devdocs-desktop](https://github.com/hardpixel/devdocs-desktop)                | GTK 应用                      | ![Latest GitHub commit](https://img.shields.io/github/last-commit/hardpixel/devdocs-desktop?logo=github&label)    | ![GitHub stars](https://img.shields.io/github/stars/hardpixel/devdocs-desktop?logo=github&label)         |
+| [qwfy/doc-browser](https://github.com/qwfy/doc-browser)                                  | Linux 应用                     | ![Latest GitHub commit](https://img.shields.io/github/last-commit/qwfy/doc-browser?logo=github&label)             | ![GitHub stars](https://img.shields.io/github/stars/qwfy/doc-browser?logo=github&label)                  |
+| [dteoh/devdocs-macos](https://github.com/dteoh/devdocs-macos)                            | macOS 应用                     | ![Latest GitHub commit](https://img.shields.io/github/last-commit/dteoh/devdocs-macos?logo=github&label)          | ![GitHub stars](https://img.shields.io/github/stars/dteoh/devdocs-macos?logo=github&label)               |
+| [Sublime Text plugin](https://sublime.wbond.net/packages/DevDocs)                        | Sublime Text 插件               | ![Latest GitHub commit](https://img.shields.io/github/last-commit/vitorbritto/sublime-devdocs?logo=github&label)  | ![GitHub stars](https://img.shields.io/github/stars/vitorbritto/sublime-devdocs?logo=github&label)       |
+| [mohamed3nan/DevDocs-Tab](https://github.com/mohamed3nan/DevDocs-Tab)                    | VS Code 扩展（标签页浏览）      | ![Latest GitHub commit](https://img.shields.io/github/last-commit/mohamed3nan/DevDocs-Tab?logo=github&label)      | ![GitHub stars](https://img.shields.io/github/stars/mohamed3nan/DevDocs-Tab?logo=github&label)           |
+| [deibit/vscode-devdocs](https://marketplace.visualstudio.com/items?itemName=deibit.devdocs) | VS Code 扩展（浏览器打开）      | ![Latest GitHub commit](https://img.shields.io/github/last-commit/deibit/vscode-devdocs?logo=github&label)        | ![GitHub stars](https://img.shields.io/github/stars/deibit/vscode-devdocs?logo=github&label)             |
+| [mdh34/quickDocs](https://github.com/mdh34/quickDocs)                                    | 基于 Vala/Python 的查看器        | ![Latest GitHub commit](https://img.shields.io/github/last-commit/mdh34/quickDocs?logo=github&label)              | ![GitHub stars](https://img.shields.io/github/stars/mdh34/quickDocs?logo=github&label)                   |
+| [girishji/devdocs.vim](https://github.com/girishji/devdocs.vim)                          | Vim 插件 & TUI（Vim 内浏览）     | ![Latest GitHub commit](https://img.shields.io/github/last-commit/girishji/devdocs.vim?logo=github&label)          | ![GitHub stars](https://img.shields.io/github/stars/girishji/devdocs.vim?logo=github&label)               |
+| [romainl/vim-devdocs](https://github.com/romainl/vim-devdocs)                            | Vim 插件                        | ![Latest GitHub commit](https://img.shields.io/github/last-commit/romainl/vim-devdocs?logo=github&label)           | ![GitHub stars](https://img.shields.io/github/stars/romainl/vim-devdocs?logo=github&label)               |
+| [waiting-for-dev/vim-www](https://github.com/waiting-for-dev/vim-www)                    | Vim 插件                        | ![Latest GitHub commit](https://img.shields.io/github/last-commit/waiting-for-dev/vim-www?logo=github&label)       | ![GitHub stars](https://img.shields.io/github/stars/waiting-for-dev/vim-www?logo=github&label)           |
+| [luckasRanarison/nvim-devdocs](https://github.com/luckasRanarison/nvim-devdocs)          | Neovim 插件                      | ![Latest GitHub commit](https://img.shields.io/github/last-commit/luckasRanarison/nvim-devdocs?logo=github&label)  | ![GitHub stars](https://img.shields.io/github/stars/luckasRanarison/nvim-devdocs?logo=github&label)      |
+| [toiletbril/dedoc](https://github.com/toiletbril/dedoc)                                  | 终端查看器                       | ![Latest GitHub commit](https://img.shields.io/github/last-commit/toiletbril/dedoc?logo=github&label)              | ![GitHub stars](https://img.shields.io/github/stars/toiletbril/dedoc?logo=github&label)                  |
+| [Raycast Devdocs](https://www.raycast.com/djpowers/devdocs)                              | Raycast 扩展                     | 不可用                 | 不可用                |
+| [chrisgrieser/alfred-docs-searches](https://github.com/chrisgrieser/alfred-docs-searches) | Alfred 工作流                    | ![Latest GitHub commit](https://img.shields.io/github/last-commit/chrisgrieser/alfred-docs-searches?logo=github&label) | ![GitHub stars](https://img.shields.io/github/stars/chrisgrieser/alfred-docs-searches?logo=github&label) |
 
-## Copyright / License
+## 版权 / 许可证
 
-Copyright 2013–2025 Thibaut Courouble and [other contributors](https://github.com/freeCodeCamp/devdocs/graphs/contributors)
+Copyright 2013–2025 Thibaut Courouble 及 [其他贡献者](https://github.com/freeCodeCamp/devdocs/graphs/contributors)
 
-This software is licensed under the terms of the Mozilla Public License v2.0. See the [COPYRIGHT](./COPYRIGHT) and [LICENSE](./LICENSE) files.
+本软件遵循 Mozilla Public License v2.0 许可协议。详见 [COPYRIGHT](./COPYRIGHT) 和 [LICENSE](./LICENSE) 文件。
 
-Please do not use the name DevDocs to endorse or promote products derived from this software without the maintainers' permission, except as may be necessary to comply with the notice/attribution requirements.
+未经维护者许可，请勿使用 DevDocs 名称为衍生产品背书或推广，除非为满足声明/署名要求所必需。
 
-We also wish that any documentation file generated using this software be attributed to DevDocs. Let's be fair to all contributors by giving credit where credit's due. Thanks!
+我们也希望任何使用本软件生成的文档文件能注明 DevDocs 来源。让我们共同尊重所有贡献者的劳动成果，谢谢！
 
-## Questions?
+## 常见问题
 
-If you have any questions, please feel free to ask them on the contributor chat room on [Discord](https://discord.gg/PRyKn3Vbay).
+如有疑问，欢迎在 [Discord](https://discord.gg/PRyKn3Vbay) 贡献者聊天室提问。

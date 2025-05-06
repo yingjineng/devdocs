@@ -1,9 +1,9 @@
 //= depend_on news.json
 
-app.templates.newsPage = () => ` <h1 class="_lined-heading">Changelog</h1>
+app.templates.newsPage = () => ` <h1 class="_lined-heading">更新日志</h1>
 <p class="_note">
-For the latest news, follow <a href="https://twitter.com/DevDocs">@DevDocs</a>.<br>
-For development updates, follow the project on <a href="https://github.com/freeCodeCamp/devdocs">GitHub</a>.
+获取最新消息，请关注 <a href="https://twitter.com/DevDocs">@DevDocs</a>。<br>
+获取开发进展，请在 <a href="https://github.com/freeCodeCamp/devdocs">GitHub</a> 关注本项目。
 <div class="_news">${app.templates.newsList(app.news)}</div> `;
 
 app.templates.newsList = function(news, options = {}) {
@@ -14,7 +14,7 @@ app.templates.newsList = function(news, options = {}) {
     const date = new Date(value[0]);
     if ((options.years !== false) && (year !== date.getUTCFullYear())) {
       year = date.getUTCFullYear();
-      result += `<h2 class="_block-heading">${year}</h2>`;
+      result += `<h2 class="_block-heading">${year}年</h2>`;
     }
     result += newsItem(date, value.slice(1));
   }
@@ -22,10 +22,10 @@ app.templates.newsList = function(news, options = {}) {
   return result;
 };
 
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const MONTHS = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
 
 var newsItem = function(date, news) {
-  date = `<span class="_news-date">${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}</span>`;
+  date = `<span class="_news-date">${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}日</span>`;
   let result = '';
 
   for (let i = 0; i < news.length; i++) {
