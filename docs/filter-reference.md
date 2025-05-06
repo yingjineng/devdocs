@@ -1,17 +1,17 @@
-**Table of contents:**
+**目录：**
 
-* [Overview](#overview)
-* [Instance methods](#instance-methods)
-* [Core filters](#core-filters)
-* [Custom filters](#custom-filters)
+* [概述](#概述)
+* [实例方法](#实例方法)
+* [核心过滤器](#核心过滤器)
+* [自定义过滤器](#自定义过滤器)
   - [CleanHtmlFilter](#cleanhtmlfilter)
   - [EntriesFilter](#entriesfilter)
 
-## Overview
+## 概述
 
-Filters use the [HTML::Pipeline](https://github.com/jch/html-pipeline) library. They take an HTML string or [Nokogiri](http://nokogiri.org/) node as input, optionally perform modifications and/or extract information from it, and then outputs the result. Together they form a pipeline where each filter hands its output to the next filter's input. Every documentation page passes through this pipeline before being copied on the local filesystem.
+过滤器使用 [HTML::Pipeline](https://github.com/jch/html-pipeline) 库。它们以 HTML 字符串或 [Nokogiri](http://nokogiri.org/) 节点作为输入，可选地对其进行修改和/或提取信息，然后输出结果。它们共同组成一个管道，每个过滤器将其输出传递给下一个过滤器的输入。每个文档页面在被复制到本地文件系统之前都会经过这个管道。
 
-Filters are subclasses of the [`Docs::Filter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/core/filter.rb) class and require a `call` method. A basic implementation looks like this:
+过滤器是 [`Docs::Filter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/core/filter.rb) 类的子类，并且需要实现一个 `call` 方法。一个基本实现如下：
 
 ```ruby
 module Docs
@@ -23,81 +23,81 @@ module Docs
 end
 ```
 
-Filters which manipulate the Nokogiri node object (`doc` and related methods) are _HTML filters_ and must not manipulate the HTML string (`html`). Vice-versa, filters which manipulate the string representation of the document are _text filters_ and must not manipulate the Nokogiri node object. The two types are divided into two stacks within the scrapers. These stacks are then combined into a pipeline that calls the HTML filters before the text filters (more details [here](./scraper-reference.md#filter-stacks)). This is to avoid parsing the document multiple times.
+操作 Nokogiri 节点对象（`doc` 及相关方法）的过滤器称为 _HTML 过滤器_，不得操作 HTML 字符串（`html`）。反之，操作文档字符串表示的过滤器称为 _文本过滤器_，不得操作 Nokogiri 节点对象。这两类过滤器在爬虫中被分为两个堆栈，然后组合成一个管道，先调用 HTML 过滤器，再调用文本过滤器（更多细节见[此处](./scraper-reference.md#filter-stacks)）。这样可以避免多次解析文档。
 
-The `call` method must return either `doc` or `html`, depending on the type of filter.
+`call` 方法必须根据过滤器类型返回 `doc` 或 `html`。
 
-## Instance methods
+## 实例方法
 
-* `doc` [Nokogiri::XML::Node]
-  The Nokogiri representation of the container element.
-  See [Nokogiri's API docs](http://www.rubydoc.info/github/sparklemotion/nokogiri/Nokogiri/XML/Node) for the list of available methods.
+* `doc` [Nokogiri::XML::Node]  
+  容器元素的 Nokogiri 表示。  
+  参见 [Nokogiri API 文档](http://www.rubydoc.info/github/sparklemotion/nokogiri/Nokogiri/XML/Node) 获取可用方法列表。
 
-* `html` [String]
-  The string representation of the container element.
+* `html` [String]  
+  容器元素的字符串表示。
 
-* `context` [Hash] **(frozen)**
-  The scraper's `options` along with a few additional keys: `:base_url`, `:root_url`, `:root_page` and `:url`.
+* `context` [Hash] **(冻结)**  
+  爬虫的 `options`，以及一些额外的键：`:base_url`、`:root_url`、`:root_page` 和 `:url`。
 
-* `result` [Hash]
-  Used to store the page's metadata and pass back information to the scraper.
-  Possible keys:
+* `result` [Hash]  
+  用于存储页面元数据并向爬虫返回信息。  
+  可能的键：
 
-  - `:path` — the page's normalized path
-  - `:store_path` — the path where the page will be stored (equal to `:path` with `.html` at the end)
-  - `:internal_urls` — the list of distinct internal URLs found within the page
-  - `:entries` — the [`Entry`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/core/models/entry.rb) objects to add to the index
+  - `:path` — 页面标准化路径
+  - `:store_path` — 页面存储路径（等于 `:path`，末尾加 `.html`）
+  - `:internal_urls` — 页面内发现的不同内部 URL 列表
+  - `:entries` — 要添加到索引的 [`Entry`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/core/models/entry.rb) 对象
 
-* `css`, `at_css`, `xpath`, `at_xpath`
-  Shortcuts for `doc.css`, `doc.xpath`, etc.
+* `css`, `at_css`, `xpath`, `at_xpath`  
+  `doc.css`、`doc.xpath` 等的快捷方式。
 
-* `base_url`, `current_url`, `root_url` [Docs::URL]
-  Shortcuts for `context[:base_url]`, `context[:url]`, and `context[:root_url]` respectively.
+* `base_url`, `current_url`, `root_url` [Docs::URL]  
+  分别为 `context[:base_url]`、`context[:url]` 和 `context[:root_url]` 的快捷方式。
 
-* `root_path` [String]
-  Shortcut for `context[:root_path]`.
+* `root_path` [String]  
+  `context[:root_path]` 的快捷方式。
 
-* `subpath` [String]
-  The sub-path from the base URL of the current URL.
-  _Example: if `base_url` equals `example.com/docs` and `current_url` equals `example.com/docs/file?raw`, the returned value is `/file`._
+* `subpath` [String]  
+  当前 URL 相对于 base URL 的子路径。  
+  _示例：如果 `base_url` 为 `example.com/docs`，`current_url` 为 `example.com/docs/file?raw`，返回值为 `/file`。_
 
-* `slug` [String]
-  The `subpath` removed of any leading slash or `.html` extension.
-  _Example: if `subpath` equals `/dir/file.html`, the returned value is `dir/file`._
+* `slug` [String]  
+  去除任何前导斜杠或 `.html` 扩展名的 `subpath`。  
+  _示例：如果 `subpath` 为 `/dir/file.html`，返回值为 `dir/file`。_
 
-* `root_page?` [Boolean]
-  Returns `true` if the current page is the root page.
+* `root_page?` [Boolean]  
+  如果当前页面是根页面，则返回 `true`。
 
-* `initial_page?` [Boolean]
-  Returns `true` if the current page is the root page or its subpath is one of the scraper's `initial_paths`.
+* `initial_page?` [Boolean]  
+  如果当前页面是根页面或其子路径属于爬虫的 `initial_paths`，则返回 `true`。
 
-## Core filters
+## 核心过滤器
 
-* [`ContainerFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/container.rb) — changes the root node of the document (remove everything outside)
-* [`CleanHtmlFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/clean_html.rb) — removes HTML comments, `<script>`, `<style>`, etc.
-* [`NormalizeUrlsFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/normalize_urls.rb) — replaces all URLs with their fully qualified counterpart
-* [`InternalUrlsFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/internal_urls.rb) — detects internal URLs (the ones to scrape) and replaces them with their unqualified, relative counterpart
-* [`NormalizePathsFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/normalize_paths.rb) — makes the internal paths consistent (e.g. always end with `.html`)
-* [`CleanLocalUrlsFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/clean_local_urls.rb) — removes links, iframes and images pointing to localhost (`FileScraper` only)
-* [`InnerHtmlFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/inner_html.rb) — converts the document to a string
-* [`CleanTextFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/clean_text.rb) — removes empty nodes
-* [`AttributionFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/attribution.rb) — appends the license info and link to the original document
-* [`TitleFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/title.rb) — prepends the document with a title (disabled by default)
-* [`EntriesFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/entries.rb) — abstract filter for extracting the page's metadata
+* [`ContainerFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/container.rb) — 更改文档的根节点（移除外部所有内容）
+* [`CleanHtmlFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/clean_html.rb) — 移除 HTML 注释、`<script>`、`<style>` 等
+* [`NormalizeUrlsFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/normalize_urls.rb) — 替换所有 URL 为完全限定形式
+* [`InternalUrlsFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/internal_urls.rb) — 检测内部 URL（需要爬取的）并替换为未限定的相对路径
+* [`NormalizePathsFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/normalize_paths.rb) — 使内部路径一致（如总以 `.html` 结尾）
+* [`CleanLocalUrlsFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/clean_local_urls.rb) — 移除指向 localhost 的链接、iframe 和图片（仅限 `FileScraper`）
+* [`InnerHtmlFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/inner_html.rb) — 将文档转换为字符串
+* [`CleanTextFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/clean_text.rb) — 移除空节点
+* [`AttributionFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/attribution.rb) — 添加许可信息和原文链接
+* [`TitleFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/title.rb) — 在文档前添加标题（默认禁用）
+* [`EntriesFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/entries.rb) — 用于提取页面元数据的抽象过滤器
 
-## Custom filters
+## 自定义过滤器
 
-Scrapers can have any number of custom filters but require at least the two described below.
+爬虫可以有任意数量的自定义过滤器，但至少需要下面两种。
 
-**Note:** filters are located in the [`lib/docs/filters`](https://github.com/freeCodeCamp/devdocs/tree/main/lib/docs/filters/) directory. The class's name must be the [CamelCase](http://api.rubyonrails.org/classes/String.html#method-i-camelize) equivalent of the filename.
+**注意：** 过滤器位于 [`lib/docs/filters`](https://github.com/freeCodeCamp/devdocs/tree/main/lib/docs/filters/) 目录。类名必须是文件名的 [CamelCase](http://api.rubyonrails.org/classes/String.html#method-i-camelize) 形式。
 
 ### `CleanHtmlFilter`
 
-The `CleanHtml` filter is tasked with cleaning the HTML markup where necessary and removing anything superfluous or nonessential. Only the core documentation should remain at the end.
+`CleanHtml` 过滤器负责在必要时清理 HTML 标记，并移除所有多余或非必要内容。最终只应保留核心文档内容。
 
-Nokogiri's many jQuery-like methods make it easy to search and modify elements — see the [API docs](http://www.rubydoc.info/github/sparklemotion/nokogiri/Nokogiri/XML/Node).
+Nokogiri 提供了许多类似 jQuery 的方法，便于查找和修改元素——参见 [API 文档](http://www.rubydoc.info/github/sparklemotion/nokogiri/Nokogiri/XML/Node)。
 
-Here's an example implementation that covers the most common use-cases:
+以下是涵盖常见用例的示例实现：
 
 ```ruby
 module Docs
@@ -107,17 +107,17 @@ module Docs
         css('hr').remove
         css('#changelog').remove if root_page?
 
-        # Set id attributes on <h3> instead of an empty <a>
+        # 将 id 属性设置在 <h3> 上，而不是空 <a> 上
         css('h3').each do |node|
           node['id'] = node.at_css('a')['id']
         end
 
-        # Make proper table headers
+        # 正确设置表头
         css('td.header').each do |node|
           node.name = 'th'
         end
 
-        # Remove code highlighting
+        # 移除代码高亮
         css('pre').each do |node|
           node.content = node.content
         end
@@ -129,63 +129,63 @@ module Docs
 end
 ```
 
-**Notes:**
+**注意：**
 
-* Empty elements will be automatically removed by the core `CleanTextFilter` later in the pipeline's execution.
-* Although the goal is to end up with a clean version of the page, try to keep the number of modifications to a minimum, so as to make the code easier to maintain. Custom CSS is the preferred way of normalizing the pages (except for hiding stuff which should always be done by removing the markup).
-* Try to document your filter's behavior as much as possible, particularly modifications that apply only to a subset of pages. It'll make updating the documentation easier.
+* 空元素会在管道后续的核心 `CleanTextFilter` 自动移除。
+* 虽然目标是得到页面的精简版本，但应尽量减少修改次数，以便代码易于维护。自定义 CSS 是规范化页面的首选方式（除了隐藏内容应始终通过移除标记实现）。
+* 尽量记录过滤器的行为，尤其是仅适用于部分页面的修改，这将有助于后续文档的更新。
 
 ### `EntriesFilter`
 
-The `Entries` filter is responsible for extracting the page's metadata, represented by a set of _entries_, each with a name, type and path.
+`Entries` 过滤器负责提取页面的元数据，这些元数据由一组 _条目_ 表示，每个条目有名称、类型和路径。
 
-The following two models are used under the hood to represent the metadata:
+底层使用以下两个模型来表示元数据：
 
 * [`Entry(name, type, path)`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/core/models/entry.rb)
 * [`Type(name, slug, count)`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/core/models/type.rb)
 
-Each scraper must implement its own `EntriesFilter` by subclassing the [`Docs::EntriesFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/entries.rb) class. The base class already implements the `call` method and includes four methods which the subclasses can override:
+每个爬虫必须通过继承 [`Docs::EntriesFilter`](https://github.com/freeCodeCamp/devdocs/blob/main/lib/docs/filters/core/entries.rb) 类实现自己的 `EntriesFilter`。基类已实现 `call` 方法，并包含四个可被子类重写的方法：
 
-* `get_name` [String]
-  The name of the default entry (aka. the page's name).
-  It is usually guessed from the `slug` (documented above) or by searching the HTML markup.
-  **Default:** modified version of `slug` (underscores are replaced with spaces and forward slashes with dots)
+* `get_name` [String]  
+  默认条目的名称（即页面名称）。  
+  通常从 `slug`（见上文）推断，或通过查找 HTML 标记获得。  
+  **默认值：** `slug` 的修改版本（下划线替换为空格，斜杠替换为点）
 
-* `get_type` [String]
-  The type of the default entry (aka. the page's type).
-  Entries without a type can be searched for but won't be listed in the app's sidebar (unless no other entries have a type).
-  **Default:** `nil`
+* `get_type` [String]  
+  默认条目的类型（即页面类型）。  
+  没有类型的条目可以被搜索到，但不会在应用侧边栏中列出（除非没有其他条目有类型）。  
+  **默认值：** `nil`
 
-* `include_default_entry?` [Boolean]
-  Whether to include the default entry.
-  Used when a page consists of multiple entries (returned by `additional_entries`) but doesn't have a name/type of its own, or to remove a page from the index (if it has no additional entries), in which case it won't be copied on the local filesystem and any link to it in the other pages will be broken (as explained on the [Scraper Reference](./scraper-reference.md) page, this is used to keep the `:skip` / `:skip_patterns` options to a maintainable size, or if the page includes links that can't reached from anywhere else).
-  **Default:** `true`
+* `include_default_entry?` [Boolean]  
+  是否包含默认条目。  
+  当页面包含多个条目（由 `additional_entries` 返回）但自身没有名称/类型，或需要从索引中移除页面（如果没有额外条目）时使用。在这种情况下，页面不会被复制到本地文件系统，其他页面中的任何链接都会失效（如 [Scraper Reference](./scraper-reference.md) 所述，这有助于保持 `:skip` / `:skip_patterns` 选项的可维护性，或页面包含无法从其他地方访问的链接时）。  
+  **默认值：** `true`
 
-* `additional_entries` [Array]
-  The list of additional entries.
-  Each entry is represented by an Array of three attributes: its name, fragment identifier, and type. The fragment identifier refers to the `id` attribute of the HTML element (usually a heading) that the entry relates to. It is combined with the page's path to become the entry's path. If absent or `nil`, the page's path is used. If the type is absent or `nil`, the default `type` is used.
-  Example: `[ ['One'], ['Two', 'id'], ['Three', nil, 'type'] ]` adds three additional entries, the first one named "One" with the default path and type, the second one named "Two" with the URL fragment "#id" and the default type, and the third one named "Three" with the default path and the type "type".
-  The list is usually constructed by running through the markup. Exceptions can also be hard-coded for specific pages.
-  **Default:** `[]`
+* `additional_entries` [Array]  
+  额外条目列表。  
+  每个条目由一个包含三个属性的数组表示：名称、片段标识符和类型。片段标识符指向 HTML 元素的 `id` 属性（通常是标题），与页面路径组合形成条目路径。若缺失或为 `nil`，则使用页面路径。若类型缺失或为 `nil`，则使用默认类型。  
+  示例：`[ ['One'], ['Two', 'id'], ['Three', nil, 'type'] ]` 添加三个额外条目，第一个名为 "One"，使用默认路径和类型，第二个名为 "Two"，URL 片段为 "#id"，使用默认类型，第三个名为 "Three"，使用默认路径，类型为 "type"。  
+  通常通过遍历标记生成列表。特殊情况也可为特定页面硬编码。  
+  **默认值：** `[]`
 
-The following accessors are also available, but must not be overridden:
+以下访问器也可用，但不得被重写：
 
-* `name` [String]
-  Memoized version of `get_name` (`nil` for the root page).
+* `name` [String]  
+  `get_name` 的记忆化版本（根页面为 `nil`）。
 
-* `type` [String]
-  Memoized version of `get_type` (`nil` for the root page).
+* `type` [String]  
+  `get_type` 的记忆化版本（根页面为 `nil`）。
 
-**Notes:**
+**注意：**
 
-* Leading and trailing whitespace is automatically removed from names and types.
-* Names must be unique across the documentation and as short as possible (ideally less than 30 characters). Whenever possible, methods should be differentiated from properties by appending `()`, and instance methods should be differentiated from class methods using the `Class#method` or `object.method` conventions.
-* You can call `name` from `get_type` or `type` from `get_name` but doing both will cause a stack overflow (i.e. you can infer the name from the type or the type from the name, but you can't do both at the same time). Don't call `get_name` or `get_type` directly as their value isn't memoized.
-* The root page has no name and no type (both are `nil`). `get_name` and `get_type` won't get called with the page (but `additional_entries` will).
-* `Docs::EntriesFilter` is an _HTML filter_. It must be added to the scraper's `html_filters` stack.
-* Try to document the code as much as possible, particularly the special cases. It'll make updating the documentation easier.
+* 名称和类型的首尾空白会自动移除。
+* 名称在整个文档中必须唯一，并尽量简短（理想情况下少于 30 个字符）。如有可能，方法应通过添加 `()` 与属性区分，实例方法应通过 `Class#method` 或 `object.method` 区分与类方法。
+* 可以在 `get_type` 中调用 `name`，或在 `get_name` 中调用 `type`，但不能互相递归，否则会导致栈溢出（即可以从类型推断名称，或从名称推断类型，但不能同时这样做）。不要直接调用 `get_name` 或 `get_type`，因为它们的值未记忆化。
+* 根页面没有名称和类型（均为 `nil`）。`get_name` 和 `get_type` 不会在根页面上调用（但 `additional_entries` 会）。
+* `Docs::EntriesFilter` 是 _HTML 过滤器_。必须添加到爬虫的 `html_filters` 堆栈。
+* 尽量记录代码，尤其是特殊情况，这将有助于后续文档的更新。
 
-**Example:**
+**示例：**
 
 ```ruby
 module Docs
@@ -220,5 +220,4 @@ module Docs
 end
 ```
 
-
-return [[Home]]
+返回 [[Home]]

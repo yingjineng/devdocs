@@ -1,98 +1,96 @@
-# Maintainer's Guide
+# 维护者指南
 
-This document is intended for [DevDocs maintainers](#list-of-maintainers).
+本文档面向 [DevDocs 维护者](#list-of-maintainers)。
 
-## Merging pull requests
+## 合并拉取请求
 
-- PRs should be approved by at least one maintainer before being merged.
+- PR（拉取请求）在合并前应至少获得一位维护者的批准。
 
-- PRs that add or update documentations should always be built and tested locally, and the doc files uploaded by the `thor docs:upload` command, before the PR is merged on GitHub.
+- 添加或更新文档的 PR 应始终在本地构建和测试，并在 GitHub 上合并 PR 之前，通过 `thor docs:upload` 命令上传文档文件。
 
-  This workflow is required because there is a dependency between the local and production environments. The `thor docs:download` command downloads documentations from production files uploaded by the `thor docs:upload` command. If a PR adding a new documentation is merged and pushed to GitHub before the files have been uploaded to production, the `thor docs:download` will fail for the new documentation and the docker container will not build properly until the new documentation is deployed to production.
+  该工作流程是必需的，因为本地和生产环境之间存在依赖关系。`thor docs:download` 命令会从生产环境下载由 `thor docs:upload` 命令上传的文档文件。如果在文件上传到生产环境之前，添加新文档的 PR 被合并并推送到 GitHub，则 `thor docs:download` 将无法下载新文档，Docker 容器也无法正确构建，直到新文档被部署到生产环境。
 
-## Updating docs
+## 更新文档
 
-The process for updating docs is as follow:
+更新文档的流程如下：
 
-- Follow the checklist in [CONTRIBUTING.md#updating-existing-documentations](../.github/CONTRIBUTING.md#updating-existing-documentations).
-- Commit the changes (protip: use the `thor docs:commit` command documented below).
-- Optional: do more updates.
-- Run `thor docs:upload` (documented below).
-- Push to GitHub to [deploy the app](#deploying-devdocs) and verify that everything works in production.
-- Run `thor docs:clean` (documented below).
+- 按照 [CONTRIBUTING.md#updating-existing-documentations](../.github/CONTRIBUTING.md#updating-existing-documentations) 中的检查清单操作。
+- 提交更改（小提示：可使用下文介绍的 `thor docs:commit` 命令）。
+- 可选：进行更多更新。
+- 运行 `thor docs:upload`（见下文说明）。
+- 推送到 GitHub 以 [部署应用](#deploying-devdocs)，并验证生产环境一切正常。
+- 运行 `thor docs:clean`（见下文说明）。
 
-Note: changes to `public/docs/docs.json` should never be committed. This file reflects which documentations have been downloaded or generated locally, which is always none on a fresh `git clone`.
+注意：`public/docs/docs.json` 文件的更改不应被提交。该文件仅反映本地已下载或生成的文档，新的 `git clone` 环境下该文件应为空。
 
-## Setup requirements
+## 环境配置要求
 
-In order to deploy DevDocs, you must:
+要部署 DevDocs，你需要：
 
-- be given access to Heroku, [configure the Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) on your computer, and familiarize yourself with Heroku's UI and CLI, as well as that of New Relic (accessible through [the Heroku dashboard](https://dashboard.heroku.com/apps/devdocs)).
-
-- be given access to DevDocs's [Sentry instance](https://sentry.io/devdocs/devdocs-js/) (for JS error tracking) and familiarize yourself with its UI.
-
-- be provided with DevDocs's S3 credentials, and install (`brew install awscli` on macOS) and [configure](https://docs.aws.amazon.com/cli/latest/reference/configure/) the AWS CLI on your computer. The configuration must add a named profile called "devdocs":
+- 获得 Heroku 访问权限，在你的电脑上 [配置 Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)，并熟悉 Heroku 的 UI 和 CLI，以及 New Relic（可通过 [Heroku 控制台](https://dashboard.heroku.com/apps/devdocs) 访问）。
+- 获得 DevDocs 的 [Sentry 实例](https://sentry.io/devdocs/devdocs-js/) 访问权限（用于 JS 错误追踪），并熟悉其界面。
+- 获得 DevDocs 的 S3 凭证，并安装（macOS 下可用 `brew install awscli`）和 [配置](https://docs.aws.amazon.com/cli/latest/reference/configure/) AWS CLI。配置时需添加名为 "devdocs" 的配置文件：
 
   ```
   aws configure --profile devdocs
   ```
 
-## Thor commands
+## Thor 命令
 
-In addition to the [publicly-documented commands](https://github.com/freeCodeCamp/devdocs#available-commands), the following commands are aimed at DevDocs maintainers:
+除了 [公开文档中的命令](https://github.com/freeCodeCamp/devdocs#available-commands) 外，以下命令面向 DevDocs 维护者：
 
 - `thor docs:package`
 
-  Generates packages for one or more documentations. Those packages are intended to be uploaded to DevDocs's S3 bundle zone by maintainers via the `thor docs:upload` command, and downloaded by users via the `thor docs:download` command.
+  为一个或多个文档生成包。这些包将由维护者通过 `thor docs:upload` 命令上传到 DevDocs 的 S3 bundle 区域，用户可通过 `thor docs:download` 命令下载。
 
-  Versions can be specified as such: `thor docs:package rails@5.2 node@10\ LTS`.
+  可指定版本，例如：`thor docs:package rails@5.2 node@10\ LTS`。
 
-  Packages can also be automatically generated during the scraping process by passing the `--package` option to `thor docs:generate`.
+  也可在抓取过程中通过 `thor docs:generate` 命令加上 `--package` 选项自动生成包。
 
 - `thor docs:upload`
 
-  This command does two operations:
+  此命令执行两项操作：
 
-  1. sync the files for the specified documentations with S3 (used by the Heroku app);
-  2. upload the documentations' packages to DevDocs's S3 bundle zone (used by the `thor docs:download` command).
+  1. 将指定文档的文件与 S3 同步（供 Heroku 应用使用）；
+  2. 将文档包上传到 DevDocs 的 S3 bundle 区域（供 `thor docs:download` 命令使用）。
 
-  For the command to work, you must have the AWS CLI configured as indicated above.
+  运行此命令前，需按上述方式配置好 AWS CLI。
 
-  **Important:** the app should always be deployed immediately after this command has finished running. Do not run this command unless you are able and ready to deploy DevDocs.
+  **重要提示：** 此命令运行结束后应立即部署应用。除非你已准备好部署 DevDocs，否则不要运行此命令。
 
-  To upload all documentations that are packaged on your computer, run `thor docs:upload --packaged`.
-  To test your configuration and the effect of this command without uploading anything, pass the `--dryrun` option.
+  若要上传本地所有已打包的文档，可运行 `thor docs:upload --packaged`。
+  若想测试配置和命令效果但不实际上传，可加 `--dryrun` 选项。
 
 - `thor docs:commit`
 
-  Shortcut command to create a Git commit for a given documentation once it has been updated. Scraper and `assets/` file changes will be committed. The commit message will include the most recent version that the documentation was updated to. If some files were missed by the commit, use `git commit --amend` to add them to the commit. The command may be run before `thor docs:upload` is run, but the commit should not be pushed to GitHub before the files have been uploaded and the app deployed.
+  更新文档后，为指定文档创建 Git 提交的快捷命令。会提交爬虫和 `assets/` 文件的更改，提交信息会包含文档更新到的最新版本。如果有文件遗漏，可用 `git commit --amend` 补充。该命令可在运行 `thor docs:upload` 前执行，但在文件上传和应用部署前，不应推送到 GitHub。
 
 - `thor docs:clean`
 
-  Shortcut command to delete all package files (once uploaded via `thor docs:upload`, they are not needed anymore).
+  上传包文件后（通过 `thor docs:upload`），可用此命令删除所有包文件。
 
-## Deploying DevDocs
+## 部署 DevDocs
 
-Once docs have been uploaded via `thor docs:upload` (if applicable), you can push to the DevDocs main branch (or merge the PR containing the updates). This triggers a GitHub action which starts by running the tests. If they succeed, the Heroku application will be deployed automatically.
+文档通过 `thor docs:upload` 上传后（如适用），你可以推送到 DevDocs 主分支（或合并包含更新的 PR）。这会触发 GitHub Action，首先运行测试，测试通过后会自动部署 Heroku 应用。
 
-- If you're deploying documentation updates, verify that the documentations work properly once the deploy is done. Keep in mind that you'll need to wait a few seconds for the service worker to finish caching the new assets. You should see a "DevDocs has been updated" notification appear when the caching is done, after which you need to refresh the page to see the changes.
-- If you're deploying frontend changes, monitor [Sentry](https://sentry.io/devdocs/devdocs-js/) for new JS errors once the deploy is done.
-- If you're deploying server changes, monitor New Relic (accessible through [the Heroku dashboard](https://dashboard.heroku.com/apps/devdocs)) for Ruby exceptions and throughput or response time changes once the deploy is done.
+- 若部署文档更新，部署完成后请验证文档是否正常。注意需等待几秒钟让 Service Worker 缓存新资源。缓存完成后会出现 "DevDocs has been updated" 通知，刷新页面即可看到更改。
+- 若部署前端更改，部署完成后请在 [Sentry](https://sentry.io/devdocs/devdocs-js/) 监控新的 JS 错误。
+- 若部署服务端更改，部署完成后请在 New Relic（可通过 [Heroku 控制台](https://dashboard.heroku.com/apps/devdocs) 访问）监控 Ruby 异常及吞吐量或响应时间变化。
 
-If any issue arises, run `heroku rollback` to rollback to the previous version of the app (this can also be done via Heroku's UI). Note that this will not revert changes made to documentation files that were uploaded via `thor docs:upload`. Try and fix the issue as quickly as possible, then re-deploy the app. Reach out to other maintainers if you need help.
+如遇问题，可运行 `heroku rollback` 回滚到上一个版本（也可通过 Heroku UI 操作）。注意，这不会回滚通过 `thor docs:upload` 上传的文档文件。请尽快修复问题并重新部署。如需帮助请联系其他维护者。
 
-If this is your first deploy, make sure another maintainer is around to assist.
+首次部署时，请确保有其他维护者协助。
 
-## Infrastructure
+## 基础设施
 
-The bundled documents are available at downloads.devdocs.io and the documents themselves at documents.devdocs.io. Download and document requests are proxied to S3 buckets devdocs-downloads.s3.amazonaws.com and devdocs-documents.s3.amazonaws.com respectively.
+打包文档可通过 downloads.devdocs.io 获取，文档本身可通过 documents.devdocs.io 获取。下载和文档请求会被代理到 S3 存储桶 devdocs-downloads.s3.amazonaws.com 和 devdocs-documents.s3.amazonaws.com。
 
-New proxy VMs should be created from the `devdocs-proxy` snapshot. Before adding them to the load-balancer, it's necessary to add their IP addresses to the aws:SourceIp lists for both buckets, or their requests will be rejected.
+新建代理 VM 时，应从 `devdocs-proxy` 快照创建。在加入负载均衡器前，需将其 IP 地址添加到两个存储桶的 aws:SourceIp 列表，否则请求会被拒绝。
 
-When creating a new proxy VM and the `devdocs-proxy` snapshot is not available, then the new vm should be provisioned as follows:
+若新建代理 VM 时没有 `devdocs-proxy` 快照，则应按如下方式配置新 VM：
 
 ```bash
-# we need at least nginx 1.19.x
+# 需要至少 nginx 1.19.x
 wget https://nginx.org/keys/nginx_signing.key
 apt-key add nginx_signing.key
 echo 'deb https://nginx.org/packages/mainline/ubuntu/ focal nginx' >> /etc/apt/sources.list
@@ -101,24 +99,24 @@ apt-get -y remove nginx-common
 apt-get -y update
 apt-get -y install nginx
 
-# the config is on github
+# 配置文件在 github 上
 rm -rf /etc/nginx/*
 rm -rf /etc/nginx/.* 2> /dev/null
 git clone https://github.com/freeCodeCamp/devdocs-nginx-config.git /etc/nginx
 
-# at this point we need to add the certs from Cloudflare and test the config
+# 此时需从 Cloudflare 添加证书并测试配置
 nginx -t
 
-# if nginx is already running, just
+# 如果 nginx 已在运行
 # ps aux | grep nginx
-# find the number and kill it
+# 找到进程号并 kill 掉
 
 nginx
 ```
 
-## List of maintainers in alphabetical order
+## 维护者名单（按字母顺序）
 
-The following people (used to) maintain DevDocs:
+以下人员（曾）维护 DevDocs：
 
 - [Ahmad Abdolsaheb](https://github.com/ahmadabdolsaheb)
 - [Bryan Hernández](https://github.com/MasterEnoc)
@@ -129,8 +127,8 @@ The following people (used to) maintain DevDocs:
 - [Simon Legner](https://github.com/simon04)
 - [Thibaut Courouble](https://github.com/thibaut)
 
-To reach out, please ping [@freeCodeCamp/devdocs](https://github.com/orgs/freeCodeCamp/teams/devdocs).
+如需联系，请 @[@freeCodeCamp/devdocs](https://github.com/orgs/freeCodeCamp/teams/devdocs)。
 
-Interested in helping maintain DevDocs? Come talk to us on [Discord](https://discord.gg/PRyKn3Vbay) :)
+有兴趣帮助维护 DevDocs？欢迎加入我们的 [Discord](https://discord.gg/PRyKn3Vbay) :)
 
-In addition, we appreciate the major contributions made by [these great people](https://github.com/freeCodeCamp/devdocs/graphs/contributors).
+此外，感谢 [这些优秀贡献者](https://github.com/freeCodeCamp/devdocs/graphs/contributors) 的重要贡献。

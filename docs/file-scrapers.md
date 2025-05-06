@@ -1,16 +1,14 @@
-# File Scraper Reference
+# 文件抓取器参考
 
-This lists the docs that use `FileScraper` and instructions for building some of them.
+本页列出了使用 `FileScraper` 的文档及其部分构建说明。
 
-If you open a PR to update one of these docs, please add/fix the instructions.
+如果你提交 PR 更新这些文档，请补充或修正相关说明。
 
 ## Dart
 
-Click the “API docs” link under the “Stable channel” header on
-https://www.dartlang.org/tools/sdk/archive. Rename the expanded ZIP to `dart~2`
-and put it in `docs/`
+点击 https://www.dartlang.org/tools/sdk/archive 页面 “Stable channel” 标题下的 “API docs” 链接。将下载的 ZIP 文件重命名为 `dart~2` 并放入 `docs/` 目录。
 
-Or run the following commands in your terminal:
+或者在终端运行以下命令：
 
 ```sh
 curl https://storage.googleapis.com/dart-archive/channels/stable/release/$RELEASE/api-docs/dartdocs-gen-api.zip > dartApi.zip; \
@@ -30,8 +28,7 @@ ls tmp/docs.json
 
 ## Django
 
-Go to https://docs.djangoproject.com/, select the version from the
-bubble in the bottom-right corner, then download the HTML version from the sidebar.
+访问 https://docs.djangoproject.com/，在右下角选择版本，然后从侧边栏下载 HTML 版本。
 
 ```sh
 mkdir --parent docs/django\~$VERSION/; \
@@ -41,7 +38,7 @@ bsdtar --extract --file - --directory=docs/django\~$VERSION/
 
 ## Elisp
 
-Go to https://www.gnu.org/software/emacs/manual/elisp.html, download the HTML tarball and extract its content in `docs/elisp` or run the following command:
+访问 https://www.gnu.org/software/emacs/manual/elisp.html，下载 HTML 压缩包并解压到 `docs/elisp`，或运行以下命令：
 
 ```sh
 mkdir docs/elisp \
@@ -51,7 +48,7 @@ tar --extract --gzip --strip-components=1 --directory=docs/elisp
 
 ## Erlang
 
-Go to https://www.erlang.org/downloads and download the HTML documentation file.
+访问 https://www.erlang.org/downloads 并下载 HTML 文档文件。
 
 ```ah
 mkdir --parent docs/erlang\~$VERSION/; \
@@ -62,7 +59,7 @@ bsdtar --extract --file - --directory=docs/erlang\~$VERSION/
 ## Gnu
 
 ### Bash
-Go to https://www.gnu.org/software/bash/manual/, download the HTML tar file (with one web page per node) and extract its content in `docs/bash` or run the following command:
+访问 https://www.gnu.org/software/bash/manual/，下载 HTML 压缩包（每个节点一个网页），并解压到 `docs/bash`，或运行：
 
 ```sh
 mkdir docs/bash \
@@ -71,22 +68,22 @@ tar --extract --gzip --directory=docs/bash
 ```
 
 ### GCC
-Go to https://gcc.gnu.org/onlinedocs/ and download the HTML tarball of GCC Manual and GCC CPP manual or run the following commands to download the tarballs:
+访问 https://gcc.gnu.org/onlinedocs/ 并下载 GCC 手册和 GCC CPP 手册的 HTML 压缩包，或运行：
 
 ```sh
-# GCC manual
+# GCC 手册
 mkdir docs/gcc~${VERSION}; \
 curl https://gcc.gnu.org/onlinedocs/gcc-$RELEASE/gcc-html.tar.gz | \
 tar --extract --gzip --strip-components=1 --directory=docs/gcc~${VERSION}
 
-# GCC CPP manual
+# GCC CPP 手册
 mkdir docs/gcc~${VERSION}_cpp; \
 curl https://gcc.gnu.org/onlinedocs/gcc-$RELEASE/cpp-html.tar.gz | \
 tar --extract --gzip --strip-components=1 --directory=docs/gcc~${VERSION}_cpp
 ```
 
 ### GNU Fortran
-Go to https://gcc.gnu.org/onlinedocs/ and download the HTML tarball of Fortran manual or run the following commands to download the tarball:
+访问 https://gcc.gnu.org/onlinedocs/ 并下载 Fortran 手册的 HTML 压缩包，或运行：
 
 ```sh
 mkdir docs/gnu_fortran~$VERSION; \
@@ -95,7 +92,7 @@ tar --extract --gzip --strip-components=1 --directory=docs/gnu_fortran~$VERSION
 ```
 
 ## GNU Make
-Go to https://www.gnu.org/software/make/manual/, download the HTML tarball and extract its content in `docs/gnu_make` or run the following command:
+访问 https://www.gnu.org/software/make/manual/，下载 HTML 压缩包并解压到 `docs/gnu_make`，或运行：
 
 ```sh
 mkdir docs/gnu_make \
@@ -105,8 +102,7 @@ tar --extract --gzip --strip-components=1 --directory=docs/gnu_make
 
 ## Gnuplot
 
-The most recent release can be found near the bottom of
-https://sourceforge.net/p/gnuplot/gnuplot-main/ref/master/tags/
+最新版可在 https://sourceforge.net/p/gnuplot/gnuplot-main/ref/master/tags/ 页面底部找到。
 
 ```sh
 DEVDOCS_ROOT=/path/to/devdocs
@@ -120,15 +116,14 @@ make nofigures.tex
 latex2html -html 5.0,math -split 4 -link 8 -long_titles 5 -dir $DEVDOCS_ROOT/docs/gnuplot -ascii_mode -no_auto_link nofigures.tex
 ```
 
-To install `latex2html` on macOS: `brew install basictex latex2html`, then edit
-`/usr/local/Cellar/latex2html/2019.2/l2hconf.pm` to include the path to LaTeX:
+在 macOS 上安装 `latex2html`：`brew install basictex latex2html`，然后编辑 `/usr/local/Cellar/latex2html/2019.2/l2hconf.pm`，添加 LaTeX 路径：
 
 <details>
 
-On line 21 (approximately):
+大约在第 21 行：
 
 ```
-#  Give the paths to latex and dvips on your system:
+#  配置系统中 latex 和 dvips 的路径:
 #
 $LATEX = '/Library/TeX/texbin/latex';	# LaTeX
 $PDFLATEX = '/Library/TeX/texbin/pdflatex';	# pdfLaTeX
@@ -136,7 +131,7 @@ $LUALATEX = '/Library/TeX/texbin/lualatex';	# LuaLaTeX
 $DVILUALATEX = '/Library/TeX/texbin/dvilualatex';	# dviLuaLaTeX
 $DVIPS = '/Library/TeX/texbin/dvips';	# dvips
 $DVIPNG = '';	# dvipng
-$PDFTOCAIRO = '/usr/local/bin/pdf2svg';	# pdf to svg converter
+$PDFTOCAIRO = '/usr/local/bin/pdf2svg';	# pdf 转 svg
 $PDFCROP = '';	# pdfcrop
 $GS = '/usr/local/opt/ghostscript/bin/gs';	# GhostScript
 ```
@@ -167,9 +162,7 @@ ln -s OpenGL-Refpages/gl2.1/xhtml/ opengl~2.1
 ```
 
 ## OpenJDK
-Search 'Openjdk' in https://www.debian.org/distrib/packages, find the `openjdk-$VERSION-doc` package,
-download it, extract it with `dpkg -x $PACKAGE ./` and move `./usr/share/doc/openjdk-16-jre-headless/api/`
-to `path/to/devdocs/docs/openjdk~$VERSION`
+在 https://www.debian.org/distrib/packages 搜索 'Openjdk'，找到 `openjdk-$VERSION-doc` 包，下载后用 `dpkg -x $PACKAGE ./` 解压，并将 `./usr/share/doc/openjdk-16-jre-headless/api/` 移动到 `path/to/devdocs/docs/openjdk~$VERSION`
 
 ```sh
 curl -O http://ftp.at.debian.org/debian/pool/main/o/openjdk-21/openjdk-21-doc_21.0.2+13-2_all.deb
@@ -178,31 +171,32 @@ tar xf data.tar.xz
 mv ./usr/share/doc/openjdk-21-jre-headless/api/ docs/openjdk~$VERSION
 ```
 
-If you use or have access to a Debian-based GNU/Linux distribution you can run the following command:
+如果你使用或有 Debian 系 GNU/Linux，可以运行：
+
 ```sh
 apt download openjdk-$VERSION-doc
 dpkg -x $PACKAGE ./
-# previous command makes a directory called 'usr' in the current directory
+# 上述命令会在当前目录生成 'usr' 目录
 mv ./usr/share/doc/openjdk-16-jre-headless/api/ docs/openjdk~$VERSION
 ```
 
 ## Pandas
 
-From the home directory; `devdocs`, execute below:
+在主目录下（`devdocs`），执行：
 
 ```sh
 curl https://pandas.pydata.org/docs/pandas.zip -o tmp.zip && unzip tmp.zip -d docs/pandas~2 && rm tmp.zip
 ```
 
-
 ## PHP
-Click the link under the "Many HTML files" column on https://www.php.net/download-docs.php, extract the tarball, change its name to `php` and put it in `docs/`.
+在 https://www.php.net/download-docs.php 页面点击 “Many HTML files” 列下的链接，解压后重命名为 `php` 并放入 `docs/`。
 
-Or run the following commands in your terminal:
+或者运行：
 
 ```sh
 curl https://www.php.net/distributions/manual/php_manual_en.tar.gz | tar xz; mv php-chunked-xhtml/ docs/php/
 ```
+
 ## Python 3.6+
 
 ```sh
@@ -231,18 +225,18 @@ sudo dnf install texinfo
 sudo dnf install xz-devel
 
 DEVDOCSROOT=docs/r
-RLATEST=https://cran.r-project.org/src/base/R-latest.tar.gz # or /R-${VERSION::1}/R-$VERSION.tar.gz
+RLATEST=https://cran.r-project.org/src/base/R-latest.tar.gz # 或 /R-${VERSION::1}/R-$VERSION.tar.gz
 
 RSOURCEDIR=${TMPDIR:-/tmp}/R/latest
 RBUILDDIR=${TMPDIR:-/tmp}/R/build
 mkdir -p "$RSOURCEDIR" "$RBUILDDIR" "$DEVDOCSROOT"
 
-# Download, configure, and build with static HTML pages
+# 下载、配置并构建静态 HTML 页面
 curl "$RLATEST" | tar -C "$RSOURCEDIR" -xzf - --strip-components=1
 (cd "$RBUILDDIR" && "$RSOURCEDIR/configure" --enable-prebuilt-html --with-recommended-packages --disable-byte-compiled-packages --disable-shared --disable-java --with-readline=no --with-x=no)
 make _R_HELP_LINKS_TO_TOPICS_=FALSE -C "$RBUILDDIR"
 
-# Export all html documentation built − global, and per-package
+# 导出所有生成的 html 文档（全局和每个包）
 cp -r "$RBUILDDIR/doc" "$DEVDOCSROOT/"
 ls -d "$RBUILDDIR"/library/*/html | while read orig; do
     dest="$DEVDOCSROOT${orig#$RBUILDDIR}"
@@ -266,44 +260,41 @@ cp -r minitest/docs $DEVDOCS/docs/minitest
 ```
 
 ### Ruby on Rails
-* Download a release at https://github.com/rails/rails/releases or clone https://github.com/rails/rails.git (checkout to the branch of the rails' version that is going to be scraped)
-* Open `railties/lib/rails/api/task.rb` and comment out any code related to sdoc (`configure_sdoc`)
-* Run `bundle config set --local without 'db job'` (in the Rails directory)
-* Run `bundle install && bundle exec rake rdoc` (in the Rails directory)
-* Run `cd guides && bundle exec rake guides:generate:html && cd ..`
-* Run `cp -r guides/output html/guides`
-* Run `cp -r html $DEVDOCS/docs/rails~[version]`
+* 在 https://github.com/rails/rails/releases 下载发布包，或克隆 https://github.com/rails/rails.git（切换到要抓取的 rails 版本分支）
+* 打开 `railties/lib/rails/api/task.rb`，注释掉与 sdoc（`configure_sdoc`）相关的代码
+* 在 Rails 目录下运行 `bundle config set --local without 'db job'`
+* 运行 `bundle install && bundle exec rake rdoc`
+* 进入 guides 目录并生成 HTML 指南：`cd guides && bundle exec rake guides:generate:html && cd ..`
+* 复制生成的指南到 html 目录：`cp -r guides/output html/guides`
+* 复制 html 目录到 `$DEVDOCS/docs/rails~[version]`
 
 ### Ruby
-Download the tarball of Ruby from https://www.ruby-lang.org/en/downloads/, extract it, run
-`./configure && make html` in your terminal (while your are in the ruby directory) and move
-`.ext/html` to `path/to/devdocs/docs/ruby~$VERSION/`.
+从 https://www.ruby-lang.org/en/downloads/ 下载 Ruby 的压缩包，解压后在终端运行 `./configure && make html`（在 ruby 目录下），然后将 `.ext/html` 移动到 `path/to/devdocs/docs/ruby~$VERSION/`。
 
-Or run the following commands in your terminal:
+或者运行：
+
 ```sh
 curl https://cache.ruby-lang.org/pub/ruby/$VERSION/ruby-$RELEASE.tar.gz > ruby.tar; \
 tar -xf ruby.tar; cd ruby-$RELEASE; ./configure && make html; mv .ext/html path/to/devdocs/docs/ruby~$VERSION
 ```
 
-To generate the htmls file you have to run `make` command but it does not install Ruby in your system, only generates html files so you have not
-to worry about cleaning or removing a new Ruby installation.
+生成 html 文件时只需运行 `make`，不会安装 Ruby，因此无需担心清理或卸载。
 
 ## Scala
 
-See `lib/docs/scrapers/scala.rb`
+见 `lib/docs/scrapers/scala.rb`
 
 ## SQLite
 
-Download the docs from https://sqlite.org/download.html, unzip it, and rename
-it to `docs/sqlite`
+从 https://sqlite.org/download.html 下载文档，解压并重命名为 `docs/sqlite`
 
 ```sh
 curl https://sqlite.org/2022/sqlite-doc-3400000.zip | bsdtar --extract --file - --directory=docs/sqlite/ --strip-components=1
 ```
 
 ## Three.js
-Download the docs from https://github.com/mrdoob/three.js/tree/dev/files or run the following commands in your terminal:
-Make sure to set the version per the release tag (e.g. r160). Note that the r prefix is already included, only the version number is needed.
+从 https://github.com/mrdoob/three.js/tree/dev/files 下载文档，或运行以下命令：
+请确保版本号与发布标签一致（如 r160），注意 r 前缀已包含，仅需填写数字。
 
 ```sh
 curl https://codeload.github.com/mrdoob/three.js/tar.gz/refs/tags/r${VERSION} > threejs.tar.gz
