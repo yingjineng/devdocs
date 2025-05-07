@@ -10,87 +10,85 @@ app.templates.helpPage = function () {
 
   return `\
 <nav class="_toc" role="directory">
-  <h3 class="_toc-title">Table of Contents</h3>
+  <h3 class="_toc-title">目录</h3>
   <ul class="_toc-list">
-    <li><a href="#managing-documentations">Managing Documentations</a>
-    <li><a href="#search">Search</a>
-    <li><a href="#shortcuts">Keyboard Shortcuts</a>
-    <li><a href="#aliases">Search Aliases</a>
+    <li><a href="#managing-documentations">管理文档</a>
+    <li><a href="#search">搜索</a>
+    <li><a href="#shortcuts">键盘快捷键</a>
+    <li><a href="#aliases">搜索别名</a>
   </ul>
 </nav>
 
-<h1 class="_lined-heading">User Guide</h1>
+<h1 class="_lined-heading">用户指南</h1>
 
-<h2 class="_block-heading" id="managing-documentations">Managing Documentations</h2>
+<h2 class="_block-heading" id="managing-documentations">管理文档</h2>
 <p>
-  Documentations can be enabled and disabled in the <a href="/settings">Preferences</a>.
-  Alternatively, you can enable a documentation by searching for it in the main search
-  and clicking the "Enable" link in the results.
-  For faster and better search, only enable the documentations you plan on actively using.
+  可以在<a href="/settings">偏好设置</a>中启用或禁用文档。
+  或者，你也可以在主搜索中搜索文档并点击结果中的“启用”链接来启用文档。
+  为了更快更好的搜索，请只启用你计划积极使用的文档。
 <p>
-  Once a documentation is enabled, it becomes part of the search and its content can be downloaded for offline access — and faster page loads when online — in the <a href="/offline">Offline</a> area.
+  启用文档后，它将成为搜索的一部分，并且可以在<a href="/offline">离线</a>区域下载其内容以供离线访问——在线时也能加快页面加载速度。
 
-<h2 class="_block-heading" id="search">Search</h2>
+<h2 class="_block-heading" id="search">搜索</h2>
 <p>
-  The search is case-insensitive and ignores whitespace. It supports fuzzy matching
-  (e.g. <code class="_label">bgcp</code> matches <code class="_label">background-clip</code>)
-  as well as aliases (full list <a href="#aliases">below</a>).
+  搜索不区分大小写并忽略空格。它支持模糊匹配
+  （例如 <code class="_label">bgcp</code> 匹配 <code class="_label">background-clip</code>）
+  以及别名（完整列表见<a href="#aliases">下方</a>）。
 <dl>
-  <dt id="doc_search">Searching a single documentation
+  <dt id="doc_search">在单个文档中搜索
   <dd>
-    The search can be scoped to a single documentation by typing its name (or an abbreviation)
-    and pressing <code class="_label">tab</code> (<code class="_label">space</code>&nbsp;on mobile).
-    For example, to search the JavaScript documentation, enter <code class="_label">javascript</code>
-    or <code class="_label">js</code>, then <code class="_label">tab</code>.<br>
-    To clear the current scope, empty the search field and hit <code class="_label">backspace</code> or
-    <code class="_label">esc</code>.
-  <dt id="url_search">Prefilling the search field
+    可以通过输入文档名称（或缩写）并按下 <code class="_label">tab</code>（移动端为 <code class="_label">space</code>）将搜索范围限定在单个文档。
+    例如，要搜索 JavaScript 文档，输入 <code class="_label">javascript</code>
+    或 <code class="_label">js</code>，然后按 <code class="_label">tab</code>。<br>
+    要清除当前范围，清空搜索框并按 <code class="_label">backspace</code> 或
+    <code class="_label">esc</code>。
+  <dt id="url_search">通过 URL 预填搜索框
   <dd>
-    The search can be prefilled from the URL by visiting <a href="/#q=keyword" target="_top">devdocs.io/#q=keyword</a>.
-    Characters after <code class="_label">#q=</code> will be used as search query.<br>
-    To search a single documentation, add its name (or an abbreviation) and a space before the keyword:
-    <a href="/#q=js%20date" target="_top">devdocs.io/#q=js date</a>.
-  <dt id="browser_search">Searching using the address bar
+    访问 <a href="/#q=keyword" target="_top">devdocs.io/#q=keyword</a>，即可通过 URL 预填搜索框。
+    <code class="_label">#q=</code> 后的字符将作为搜索关键词。<br>
+    若要在单个文档中搜索，在关键词前加上文档名称（或缩写）和空格：
+    <a href="/#q=js%20date" target="_top">devdocs.io/#q=js date</a>。
+  <dt id="browser_search">使用地址栏搜索
   <dd>
-    DevDocs supports OpenSearch. It can easily be installed as a search engine on most web browsers:
+    DevDocs 支持 OpenSearch。它可以很容易地作为大多数浏览器的搜索引擎安装：
     <ul>
-      <li>On Chrome, the setup is done automatically. Simply press <code class="_label">tab</code> when devdocs.io is autocompleted
-          in the omnibox (to set a custom keyword, click <em>Manage search engines\u2026</em> in Chrome's settings).
-      <li>On Firefox, <a href="https://support.mozilla.org/en-US/kb/add-or-remove-search-engine-firefox#w_add-a-search-engine-from-the-address-bar">add the search from the address bar</a>:
-          Click ••• in the address bar, and select <em>Add Search Engine</em>. Then, you can add a keyword for this search engine in the preferences.
+      <li>在 Chrome 上，设置会自动完成。当 devdocs.io 在地址栏自动补全时，直接按 <code class="_label">tab</code> 即可
+          （如需自定义关键字，请在 Chrome 设置中点击 <em>管理搜索引擎…</em>）。
+      <li>在 Firefox 上，<a href="https://support.mozilla.org/en-US/kb/add-or-remove-search-engine-firefox#w_add-a-search-engine-from-the-address-bar">可从地址栏添加搜索</a>：
+          点击地址栏中的 •••，选择 <em>添加搜索引擎</em>。然后，你可以在偏好设置中为该搜索引擎添加关键字。
 </dl>
 <p>
-  <i>Note: the above search features only work for documentations that are enabled.</i>
+  <i>注意：上述搜索功能仅适用于已启用的文档。</i>
 
-<h2 class="_block-heading" id="shortcuts">Keyboard Shortcuts</h2>
-<h3 class="_shortcuts-title">Sidebar</h3>
+<h2 class="_block-heading" id="shortcuts">键盘快捷键</h2>
+<h3 class="_shortcuts-title">侧边栏</h3>
 <dl class="_shortcuts-dl">
   <dt class="_shortcuts-dt">
     ${arrowScroll ? '<code class="_shortcut-code">shift</code> + ' : ""}
     <code class="_shortcut-code">&darr;</code>
     <code class="_shortcut-code">&uarr;</code>
-  <dd class="_shortcuts-dd">Move selection
+  <dd class="_shortcuts-dd">移动选中项
   <dt class="_shortcuts-dt">
     ${arrowScroll ? '<code class="_shortcut-code">shift</code> + ' : ""}
     <code class="_shortcut-code">&rarr;</code>
     <code class="_shortcut-code">&larr;</code>
-  <dd class="_shortcuts-dd">Show/hide sub-list
+  <dd class="_shortcuts-dd">展开/收起子列表
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">enter</code>
-  <dd class="_shortcuts-dd">Open selection
+  <dd class="_shortcuts-dd">打开选中项
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">${ctrlKey} + enter</code>
-  <dd class="_shortcuts-dd">Open selection in a new tab
+  <dd class="_shortcuts-dd">在新标签页中打开选中项
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">alt + r</code>
-  <dd class="_shortcuts-dd">Reveal current page in sidebar
+  <dd class="_shortcuts-dd">在侧边栏中显示当前页面
 </dl>
-<h3 class="_shortcuts-title">Browsing</h3>
+<h3 class="_shortcuts-title">浏览</h3>
 <dl class="_shortcuts-dl">
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">${navKey} + &larr;</code>
     <code class="_shortcut-code">${navKey} + &rarr;</code>
-  <dd class="_shortcuts-dd">Go back/forward
+  <dd class="_shortcuts-dd">后退/前进
   <dt class="_shortcuts-dt">
     ${
       arrowScroll
@@ -102,59 +100,59 @@ app.templates.helpPage = function () {
           '<code class="_shortcut-code">shift + &darr;</code> ' +
           '<code class="_shortcut-code">shift + &uarr;</code>'
     }
-  <dd class="_shortcuts-dd">Scroll step by step<br><br>
+  <dd class="_shortcuts-dd">逐步滚动<br><br>
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">space</code>
     <code class="_shortcut-code">shift + space</code>
-  <dd class="_shortcuts-dd">Scroll screen by screen
+  <dd class="_shortcuts-dd">整屏滚动
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">${ctrlKey} + &uarr;</code>
     <code class="_shortcut-code">${ctrlKey} + &darr;</code>
-  <dd class="_shortcuts-dd">Scroll to the top/bottom
+  <dd class="_shortcuts-dd">滚动到顶部/底部
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">alt + f</code>
-  <dd class="_shortcuts-dd">Focus first link in the content area<br>(press tab to focus the other links)
+  <dd class="_shortcuts-dd">聚焦内容区第一个链接<br>（按 tab 聚焦其他链接）
 </dl>
-<h3 class="_shortcuts-title">App</h3>
+<h3 class="_shortcuts-title">应用</h3>
 <dl class="_shortcuts-dl">
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">ctrl + ,</code>
-  <dd class="_shortcuts-dd">Open preferences
+  <dd class="_shortcuts-dd">打开偏好设置
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">esc</code>
-  <dd class="_shortcuts-dd">Clear search field / reset UI
+  <dd class="_shortcuts-dd">清空搜索框 / 重置界面
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">?</code>
-  <dd class="_shortcuts-dd">Show this page
+  <dd class="_shortcuts-dd">显示本页面
 </dl>
-<h3 class="_shortcuts-title">Miscellaneous</h3>
+<h3 class="_shortcuts-title">其他</h3>
 <dl class="_shortcuts-dl">
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">alt + c</code>
-  <dd class="_shortcuts-dd">Copy URL of original page
+  <dd class="_shortcuts-dd">复制原页面 URL
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">alt + o</code>
-  <dd class="_shortcuts-dd">Open original page
+  <dd class="_shortcuts-dd">打开原页面
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">alt + g</code>
-  <dd class="_shortcuts-dd">Search on Google
+  <dd class="_shortcuts-dd">在 Google 上搜索
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">alt + s</code>
-  <dd class="_shortcuts-dd">Search on Stack Overflow
+  <dd class="_shortcuts-dd">在 Stack Overflow 上搜索
   <dt class="_shortcuts-dt">
     <code class="_shortcut-code">alt + d</code>
-  <dd class="_shortcuts-dd">Search on DuckDuckGo
+  <dd class="_shortcuts-dd">在 DuckDuckGo 上搜索
 </dl>
 <p class="_note _note-green">
-  <strong>Tip:</strong> If the cursor is no longer in the search field, press <code class="_label">/</code> or
-  continue to type and it will refocus the search field and start showing new results.
+  <strong>提示：</strong> 如果光标不在搜索框中，按 <code class="_label">/</code> 或
+  直接输入内容即可重新聚焦搜索框并开始显示新结果。
 
-<h2 class="_block-heading" id="aliases">Search Aliases</h2>
+<h2 class="_block-heading" id="aliases">搜索别名</h2>
 <div class="_aliases">
   <table>
     <tr>
-      <th>Word
-      <th>Alias
+      <th>词语
+      <th>别名
     ${aliases_one
       .map(
         ([key, value]) =>
@@ -164,8 +162,8 @@ app.templates.helpPage = function () {
   </table>
   <table>
     <tr>
-      <th>Word
-      <th>Alias
+      <th>词语
+      <th>别名
       ${aliases_two
         .map(
           ([key, value]) =>
@@ -174,6 +172,6 @@ app.templates.helpPage = function () {
         .join("")}
   </table>
 </div>
-<p>Feel free to suggest new aliases on <a href="https://github.com/freeCodeCamp/devdocs/issues/new">GitHub</a>.\
+<p>欢迎在<a href="https://github.com/freeCodeCamp/devdocs/issues/new">GitHub</a>上建议新的别名。\
 `;
 };

@@ -1,8 +1,8 @@
-<%# The name of the cache to store responses in %>
-<%# If the cache name changes DevDocs is assumed to be updated %>
+<%# 存储响应的缓存名称 %>
+<%# 如果缓存名称更改，则认为 DevDocs 已更新 %>
 const cacheName = '<%= service_worker_cache_name %>';
 
-<%# Url's to cache when the service worker is installed %>
+<%# Service Worker 安装时要缓存的 URL 列表 %>
 const urlsToCache = [
   '/',
   '/favicon.ico',
@@ -11,7 +11,7 @@ const urlsToCache = [
   '<%= doc_index_urls.join "',\n  '" %>',
 ];
 
-<%# Set-up the cache %>
+<%# 设置缓存 %>
 self.addEventListener('install', event => {
   self.skipWaiting();
 
@@ -20,7 +20,7 @@ self.addEventListener('install', event => {
   );
 });
 
-<%# Remove old caches %>
+<%# 移除旧的缓存 %>
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
@@ -29,7 +29,7 @@ self.addEventListener('activate', event => {
   })());
 });
 
-<%# Handle HTTP requests %>
+<%# 处理 HTTP 请求 %>
 self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     const cachedResponse = await caches.match(event.request);
@@ -45,8 +45,8 @@ self.addEventListener('fetch', event => {
       const filename = pathname.substr(1 + pathname.lastIndexOf('/')).split(/\#|\?/g)[0];
       const extensions = ['.html', '.css', '.js', '.json', '.png', '.ico', '.svg', '.xml'];
 
-      <%# Attempt to return the index page from the cache if the user is visiting a url like devdocs.io/offline or devdocs.io/javascript/global_objects/array/find %>
-      <%# The index page will make sure the correct documentation or a proper offline page is shown  %>
+      <%# 如果用户访问如 devdocs.io/offline 或 devdocs.io/javascript/global_objects/array/find 这样的 URL，尝试从缓存返回首页 %>
+      <%# 首页会确保显示正确的文档或合适的离线页面 %>
       if (url.origin === location.origin && !extensions.some(ext => filename.endsWith(ext))) {
         const cachedIndex = await caches.match('/');
         if (cachedIndex) return cachedIndex;

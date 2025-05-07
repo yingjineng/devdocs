@@ -4,6 +4,7 @@ module Docs
 
     # release = '2024-08-20'
     self.name = 'HTML'
+    # 修改为中文文档地址
     self.base_url = 'https://developer.mozilla.org/zh-CN/docs/Web/HTML'
     self.links = {
       home: 'https://developer.mozilla.org/zh-CN/docs/Web/HTML',
@@ -14,14 +15,16 @@ module Docs
 
     options[:root_title] = 'HTML'
 
+    # 路径替换规则同步为中文路径
     options[:replace_paths] = {
-      '/Element/h1' => '/Element/Heading_Elements',
-      '/Element/h2' => '/Element/Heading_Elements',
-      '/Element/h3' => '/Element/Heading_Elements',
-      '/Element/h4' => '/Element/Heading_Elements',
-      '/Element/h5' => '/Element/Heading_Elements',
-      '/Element/h6' => '/Element/Heading_Elements',
-      '/Global_attributes/data-%2A' => '/Global_attributes/data-*' }
+      '/Reference/Elements/h1' => '/Reference/Elements/Heading_Elements',
+      '/Reference/Elements/h2' => '/Reference/Elements/Heading_Elements',
+      '/Reference/Elements/h3' => '/Reference/Elements/Heading_Elements',
+      '/Reference/Elements/h4' => '/Reference/Elements/Heading_Elements',
+      '/Reference/Elements/h5' => '/Reference/Elements/Heading_Elements',
+      '/Reference/Elements/h6' => '/Reference/Elements/Heading_Elements',
+      '/Reference/Global_attributes/data-%2A' => '/Reference/Global_attributes/data-*'
+    }
 
     options[:fix_urls] = ->(url) do
       url.sub! 'https://developer.mozilla.org/zh-CN/docs/HTML/', "#{Html.base_url}/" unless url.include?('Content_categories')
