@@ -7,15 +7,15 @@
   <meta name="format-detection" content="telephone=no">
   <meta name="theme-color" content="#eee">
   <meta property="og:image" content="/images/icon-320.png">
-  <title>DevDocs<%= " &mdash; #{@doc['full_name']} 文档" if doc_index_page? %></title>
+  <title>MaxWiki<%= " &mdash; #{@doc['full_name']} 文档" if doc_index_page? %></title>
   <link rel="canonical" href="<%= canonical_origin %><%= request.path %>">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="搜索 DevDocs">
+  <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="搜索 MaxWiki">
   <%= stylesheet_tag 'application' %>
 </head>
 <body data-doc="<%= CGI::escape_html @doc.to_json %>">
-<noscript class="_fail">DevDocs 需要启用 JavaScript。</noscript>
+<noscript class="_fail">MaxWiki 需要启用 JavaScript。</noscript>
 <%= erb :app -%>
 <%= javascript_tag 'application' %><% unless App.production? %>
 <%= javascript_tag 'debug' %><% end %>
