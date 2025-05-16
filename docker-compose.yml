@@ -1,0 +1,10 @@
+services:
+  devdocs:
+    build:
+      context: .
+    container_name: devdocs
+    ports:
+      - "9292:9292"
+    volumes:
+      - ./public/docs:/devdocs/public/docs
+    restart: unless-stopped

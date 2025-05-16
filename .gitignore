@@ -4,7 +4,7 @@ log
 tmp
 public/assets
 public/fonts
-public/docs/**/*
+# public/docs/**/*
 docs/**/*
 !docs/*.md
 /vendor
